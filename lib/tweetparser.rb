@@ -21,7 +21,7 @@ require 'json'
 
 USERNAME_REGEX = /[@]([a-zA-Z0-9_]{1,16})/
 SOURCE_REGEX = /^<a href=\"(https?:\/\/\S+|erased_\d+)\" rel=\"nofollow\">(.+)<\/a>$/
-HASHTAG_REGEX = /[#]([^.,-:!*_?#]+)/
+HASHTAG_REGEX = /[#]([^.,-:!*_?#\s]+)/
 
 class TweetParser
   
