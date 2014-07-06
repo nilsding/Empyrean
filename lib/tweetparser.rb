@@ -18,7 +18,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 require 'json'
-require 'pp'
 
 USERNAME_REGEX = /[@]([a-zA-Z0-9_]{1,16})/
 
