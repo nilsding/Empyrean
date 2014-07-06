@@ -21,6 +21,7 @@ require 'json'
 
 USERNAME_REGEX = /[@]([a-zA-Z0-9_]{1,16})/
 SOURCE_REGEX = /^<a href=\"(https?:\/\/\S+|erased_\d+)\" rel=\"nofollow\">(.+)<\/a>$/
+HASHTAG_REGEX = /[#](\S+)/
 
 class TweetParser
   
@@ -31,6 +32,7 @@ class TweetParser
   def self.parse(tweets)
     retdict = {
       mentions: {},
+      hashtags: {},
       clients: {},
       tweet_count: 0,
       retweet_count: 0,
@@ -39,26 +41,34 @@ class TweetParser
     tweets.each do |tweet|
       parsed_tweet = self.parse_one tweet
       
-      if parsed_tweet[:retweet] # the tweet was a retweet
+      if parsed_tweet[:retweet]  # the tweet was a retweet
         # increase retweeted tweets count
         retdict[:retweet_count] += 1
-      else # add mentions to the mentions dict
-        parsed_tweet[:mentions].each do |user, data|
+      else
+        parsed_tweet[:mentions].each do |user, data|  # add mentions to the mentions dict
           retdict[:mentions][user] ||= { count: 0 }
           retdict[:mentions][user][:count] += data[:count]
+          retdict[:mentions][user][:name] ||= data[:name]
           retdict[:mentions][user][:examples] ||= []
           retdict[:mentions][user][:examples] << data[:example]
+        end
+        parsed_tweet[:hashtags].each do |hashtag, data|  # add hashtags to the hashtags dict
+          retdict[:hashtags][hashtag] ||= { count: 0 }
+          retdict[:hashtags][hashtag][:count] += data[:count]
+          retdict[:hashtags][hashtag][:hashtag] ||= data[:hashtag]
+          retdict[:hashtags][hashtag][:examples] ||= []
+          retdict[:hashtags][hashtag][:examples] << data[:example]
         end
         # increase self tweeted tweets count
         retdict[:selftweet_count] += 1
       end
       
       # add client to the clients dict      
-      client_sha1 = parsed_tweet[:client][:name]
-      retdict[:clients][client_sha1] ||= { count: 0 }
-      retdict[:clients][client_sha1][:count] += 1
-      retdict[:clients][client_sha1][:name] = parsed_tweet[:client][:name]
-      retdict[:clients][client_sha1][:url] = parsed_tweet[:client][:url]
+      client_dict = parsed_tweet[:client][:name]
+      retdict[:clients][client_dict] ||= { count: 0 }
+      retdict[:clients][client_dict][:count] += 1
+      retdict[:clients][client_dict][:name] = parsed_tweet[:client][:name]
+      retdict[:clients][client_dict][:url] = parsed_tweet[:client][:url]
       
       # increase tweet count
       retdict[:tweet_count] += 1
@@ -75,6 +85,7 @@ class TweetParser
     puts "==> #{tweet['id']}" if OPTIONS.verbose
     retdict = {
       mentions: {},
+      hashtags: {},
       retweet: false,
       client: {
         name: "",
@@ -86,12 +97,24 @@ class TweetParser
     unless tweet['retweeted_status'].nil?
       retdict[:retweet] = true
     else
+      # scan for mentions
       tweet['text'].scan USERNAME_REGEX do |user|
-        user = user[0].downcase
-        puts "===> mentioned: #{user}" if OPTIONS.verbose
-        retdict[:mentions][user] ||= {}
-        retdict[:mentions][user][:count] = retdict[:mentions][user][:count].to_i.succ
-        retdict[:mentions][user][:example] ||= tweet['text']
+        hash_user = user[0].downcase
+        puts "===> mentioned: #{user[0]}" if OPTIONS.verbose
+        retdict[:mentions][hash_user] ||= {}
+        retdict[:mentions][hash_user][:name] ||= user[0]
+        retdict[:mentions][hash_user][:count] = retdict[:mentions][hash_user][:count].to_i.succ
+        retdict[:mentions][hash_user][:example] ||= tweet['text']
+      end
+      
+      # scan for hashtags
+      tweet['text'].scan HASHTAG_REGEX do |hashtag|
+        hash_hashtag = hashtag[0].downcase
+        puts "===> hashtag: ##{hashtag[0]}" if OPTIONS.verbose
+        retdict[:hashtags][hash_hashtag] ||= {}
+        retdict[:hashtags][hash_hashtag][:hashtag] ||= hashtag[0]
+        retdict[:hashtags][hash_hashtag][:count] = retdict[:hashtags][hash_hashtag][:count].to_i.succ
+        retdict[:hashtags][hash_hashtag][:example] ||= tweet['text']
       end
     end
     
@@ -109,6 +132,7 @@ class TweetParser
   def self.merge_parsed(parsed)
     retdict = {
       mentions: {},
+      hashtags: {},
       clients: {},
       tweet_count: 0,
       retweet_count: 0,
@@ -122,8 +146,17 @@ class TweetParser
       elem[:mentions].each do |user, data|
         retdict[:mentions][user] ||= { count: 0 }
         retdict[:mentions][user][:count] += data[:count]
+        retdict[:mentions][user][:name] = data[:name]
         retdict[:mentions][user][:examples] ||= []
         retdict[:mentions][user][:examples] += data[:examples]
+      end
+      
+      elem[:hashtags].each do |hashtag, data|
+        retdict[:hashtags][hashtag] ||= { count: 0 }
+        retdict[:hashtags][hashtag][:count] += data[:count]
+        retdict[:hashtags][hashtag][:hashtag] = data[:hashtag]
+        retdict[:hashtags][hashtag][:examples] ||= []
+        retdict[:hashtags][hashtag][:examples] += data[:examples]
       end
       
       elem[:clients].each do |client_sha1, data|
@@ -134,13 +167,18 @@ class TweetParser
       end
     end
     
-    # take only one mention example
+    # take only one example
     retdict[:mentions].each do |user, data|
       retdict[:mentions][user][:example] = retdict[:mentions][user][:examples].sample
       retdict[:mentions][user].delete(:examples)
     end
+    retdict[:hashtags].each do |hashtag, data|
+      retdict[:hashtags][hashtag][:example] = retdict[:hashtags][hashtag][:examples].sample
+      retdict[:hashtags][hashtag].delete(:examples)
+    end
     
     retdict[:mentions] = retdict[:mentions].sort_by { |k, v| v[:count] }.reverse
+    retdict[:hashtags] = retdict[:hashtags].sort_by { |k, v| v[:count] }.reverse
     retdict[:clients]  = retdict[:clients].sort_by  { |k, v| v[:count] }.reverse
     retdict
   end
