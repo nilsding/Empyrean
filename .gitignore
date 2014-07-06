@@ -1,2 +1,4 @@
 # ignore tweets directory
 tweets/
+# ignore output HTML
+output.html
