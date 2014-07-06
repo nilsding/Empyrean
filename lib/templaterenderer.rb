@@ -22,7 +22,7 @@ require 'erb'
 class TemplateRenderer
   
   ##
-  # Initializes a new TemplateRenderer
+  # Initializes a new TemplateRenderer.
   # 
   # template: The template to use (i.e. not the file name)
   # parsed_tweets: The dict that gets returned by TweetParser::merge_parsed
@@ -34,10 +34,32 @@ class TemplateRenderer
   ##
   # Renders @template.
   def render
-    mentions = @parsed[:mentions].slice(0, 10) # top 10 mentions
+    mentions = mentions_erb
     erb = ERB.new @template
     erb.result binding
   end
+  
+  private
+    ##
+    # Returns an array with the mentions which can be easily used within ERB.
+    def mentions_erb
+      retdict = {
+        top10: [],
+        nottop: []
+      }
+      top10 = @parsed[:mentions].slice(0, 10) # top 10 mentions
+      top10.each do |mention|
+        retdict[:top10] << { name: mention[0] }.merge(mention[1])
+      end
+      
+      nottop = @parsed[:mentions].slice(11, 20) # not in the top 10
+      nottop.each do |mention|
+        mention[1].delete(:example)
+        retdict[:nottop] << { name: mention[0] }.merge(mention[1])
+      end
+      
+      retdict
+    end
   
 end
 

@@ -35,16 +35,30 @@
           </tr>
         </thead>
         <tbody>
-<% mentions.each_with_index do |user, index| %>
+<% mentions[:top10].each_with_index do |user, index| %>
           <tr>
             <td><%= index + 1 %>.</td>
-            <td>@<%= user[0] %></td>
-            <td><%= user[1][:count] %></td>
-            <td><%= user[1][:example] %></td>
+            <td>@<%= user[:name] %></td>
+            <td><%= user[:count] %></td>
+            <td><%= user[:example] %></td>
           </tr>
 <% end %>
         </tbody>
       </table>
+<% if mentions[:nottop].length > 0 %>
+      <h5>These didn't make it to the top…</h5>
+      <table class="table table-responsive table-bordered">
+        <tr>
+  <% mentions[:nottop].each_with_index do |user, index| %>
+          <td>@<%= user[:name] %> (<%= user[:count] %>)</td>
+    <% if index % 5 == 4 %>
+        </tr>
+        <tr>
+    <% end %>
+  <% end %>
+        </tr>
+      </table>
+<% end %>
       <h4>Most Used Twitter-Clients</h4>
       <p>What is/was your favorite and most used client? Find it out right here!</p>
       <table class="table table-responsive table-bordered">
