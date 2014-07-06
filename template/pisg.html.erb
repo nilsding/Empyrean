@@ -1,6 +1,39 @@
 <%#-*- coding: utf-8 -*-%>
-<% table_colours = ['#babadc', '#bcbcda', '#bebed8', '#c0c0d7', '#c2c2d4', '#c4c4d3', '#c6c6d1', '#c7c7d0', '#c9c9ce', '#cccccc'] %>
-<% table_width = 710 %>
+<%
+  table_width = 710
+
+  def _generate_colour(count, position)
+    table_colour_start = 'babadc'
+    table_colour_end   = 'cccccc'
+    
+    start_red   = table_colour_start.match(/([0-9A-Fa-f]{2}).{4}/)[1].to_i(16)
+    start_green = table_colour_start.match(/.{2}([0-9A-Fa-f]{2}).{2}/)[1].to_i(16)
+    start_blue  = table_colour_start.match(/.{4}([0-9A-Fa-f]{2})/)[1].to_i(16)
+    end_red     = table_colour_end.match(/([0-9A-Fa-f]{2}).{4}/)[1].to_i(16)
+    end_green   = table_colour_end.match(/.{2}([0-9A-Fa-f]{2}).{2}/)[1].to_i(16)
+    end_blue    = table_colour_end.match(/.{4}([0-9A-Fa-f]{2})/)[1].to_i(16)
+    
+    blue  = sprintf "%0.2x", ((((end_blue - start_blue) / count) * + position) + start_blue).abs
+    green = sprintf "%0.2x", ((((end_green - start_green) / count) * + position) + start_green).abs
+    red   = sprintf "%0.2x", ((((end_red - start_red) / count) * + position) + start_red).abs
+    
+    "##{red}#{green}#{blue}"
+  end
+  
+  table_colours_mentions = []
+  table_colours_clients = []
+  table_colours_hashtags = []
+  
+  (0...CONFIG[:mentions][:top]).each do |i|
+    table_colours_mentions << _generate_colour(CONFIG[:mentions][:top], i)
+  end
+  (0...CONFIG[:clients][:top]).each do |i|
+    table_colours_clients << _generate_colour(CONFIG[:clients][:top], i)
+  end
+  (0...CONFIG[:hashtags][:top]).each do |i|
+    table_colours_hashtags << _generate_colour(CONFIG[:hashtags][:top], i)
+  end
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -128,7 +161,7 @@ td {
 <div align="center">
 
 <span class="title">Twitter Stats</span><br />
-<br />
+<br /><% if mentions[:enabled] %>
    <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
     <tr>
      <td class="headlinebg">
@@ -140,7 +173,7 @@ td {
      </td>
     </tr>
    </table>
-  
+
 <table border="0" width="<%= table_width + 4 %>">
   <tr>
     <td>&nbsp;</td>
@@ -148,12 +181,12 @@ td {
     <td class="tdtop"><b>How often?</b></td>
     <td class="tdtop"><b>Random quote</b></td>
   </tr>
-<% mentions[:top10].each_with_index do |user, index| %>
+<% mentions[:top].each_with_index do |user, index| %>
   <tr>
     <td class="<% if index == 0 %>hi<% end %>rankc" align="left"><%= index + 1 %></td>
-    <td style="background-color: <%= table_colours[index] %>"><span><a href="https://twitter.com/<%= user[:name] %>">@<%= user[:name] %></a></span></td>
-    <td style="background-color: <%= table_colours[index] %>"><%= user[:count] %></td>
-    <td style="background-color: <%= table_colours[index] %>">"<%= user[:example][:text] %>" <a href="https://twitter.com/statuses/<%= user[:example][:id] %>">&rarr;</a></td>
+    <td style="background-color: <%= table_colours_mentions[index] %>"><span><a href="https://twitter.com/<%= user[:name] %>">@<%= user[:name] %></a></span></td>
+    <td style="background-color: <%= table_colours_mentions[index] %>"><%= user[:count] %></td>
+    <td style="background-color: <%= table_colours_mentions[index] %>">"<%= user[:example][:text] %>" <a href="https://twitter.com/statuses/<%= user[:example][:id] %>">&rarr;</a></td>
   </tr>
 <% end %>
 </table><br />
@@ -170,7 +203,8 @@ td {
       </table><br />
    <br />
 <% end %>
-
+<% end %>
+<% if clients[:enabled] %>
    <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
     <tr>
      <td class="headlinebg">
@@ -190,12 +224,12 @@ td {
     <td class="tdtop"><b>Times used</b></td>
     <td class="tdtop"><b>Percentage</b></td>
   </tr>
-<% clients[:top10].each_with_index do |client, index| %>
+<% clients[:top].each_with_index do |client, index| %>
   <tr>
     <td class="<% if index == 0 %>hi<% end %>rankc" align="left"><%= index + 1 %></td>
-    <td style="background-color: <%= table_colours[index] %>"><span><a href="<%= client[:url] %>"><%= client[:name] %></a></span></td>
-    <td style="background-color: <%= table_colours[index] %>"><%= client[:count] %></td>
-    <td style="background-color: <%= table_colours[index] %>"><%= client[:percentage] %>%</td>
+    <td style="background-color: <%= table_colours_clients[index] %>"><span><a href="<%= client[:url] %>"><%= client[:name] %></a></span></td>
+    <td style="background-color: <%= table_colours_clients[index] %>"><%= client[:count] %></td>
+    <td style="background-color: <%= table_colours_clients[index] %>"><%= client[:percentage] %>%</td>
   </tr>
 <% end %>
 </table><br />
@@ -212,7 +246,9 @@ td {
       </table><br />
    <br />
 <% end %>
+<% end %>
 
+<% if hashtags[:enabled] %>
    <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
     <tr>
      <td class="headlinebg">
@@ -232,12 +268,12 @@ td {
     <td class="tdtop"><b>Times used</b></td>
     <td class="tdtop"><b>Random quote</b></td>
   </tr>
-<% hashtags[:top10].each_with_index do |hashtag, index| %>
+<% hashtags[:top].each_with_index do |hashtag, index| %>
   <tr>
     <td class="<% if index == 0 %>hi<% end %>rankc" align="left"><%= index + 1 %></td>
-    <td style="background-color: <%= table_colours[index] %>"><span><a href="https://twitter.com/search?q=%23<%= hashtag[:hashtag] %>">#<%= hashtag[:hashtag] %></a></span></td>
-    <td style="background-color: <%= table_colours[index] %>"><%= hashtag[:count] %></td>
-    <td style="background-color: <%= table_colours[index] %>">"<%= hashtag[:example][:text] %>" <a href="https://twitter.com/statuses/<%= hashtag[:example][:id] %>">&rarr;</a></td>
+    <td style="background-color: <%= table_colours_hashtags[index] %>"><span><a href="https://twitter.com/search?q=%23<%= hashtag[:hashtag] %>">#<%= hashtag[:hashtag] %></a></span></td>
+    <td style="background-color: <%= table_colours_hashtags[index] %>"><%= hashtag[:count] %></td>
+    <td style="background-color: <%= table_colours_hashtags[index] %>">"<%= hashtag[:example][:text] %>" <a href="https://twitter.com/statuses/<%= hashtag[:example][:id] %>">&rarr;</a></td>
   </tr>
 <% end %>
 </table><br />
@@ -253,6 +289,7 @@ td {
         </tr>
       </table><br />
    <br />
+<% end %>
 <% end %>
    
 <span class="small">

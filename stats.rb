@@ -22,11 +22,14 @@ $:.unshift File.expand_path './lib', File.dirname(__FILE__)
 RTS_VERSION_STR = "RubyTwitterStats 0.0.1"
 
 require 'optparser'
+require 'configloader'
 require 'tweetloader'
 require 'tweetparser'
 require 'templaterenderer'
 
 OPTIONS = OptParser.parse(ARGV)
+CONFIG = ConfigLoader.load_config(OPTIONS.config)
+
 tweet_files = TweetLoader.read_directory(OPTIONS.jsondir)
 parsed = []
 tweet_files.each do |file|
@@ -38,19 +41,34 @@ parsed = TweetParser.merge_parsed parsed
 puts "Analyzed #{parsed[:tweet_count]} tweets"
 puts "  - #{(parsed[:retweet_count] * 100 / parsed[:tweet_count].to_f).round(2)}% retweets\n"
 
-puts "You send most mentions to:"
-(0...10).each do |i|
-  puts "#{sprintf "%2d", i + 1}. #{parsed[:mentions][i][1][:name]} (#{parsed[:mentions][i][1][:count]} times)"
+if CONFIG[:mentions][:enabled]
+  puts "You send most mentions to:"
+  begin
+    (0...CONFIG[:mentions][:top]).each do |i|
+      puts "#{sprintf "%2d", i + 1}. #{parsed[:mentions][i][1][:name]} (#{parsed[:mentions][i][1][:count]} times)"
+    end
+  rescue
+  end
 end
 
-puts "Your most used hashtags:"
-(0...10).each do |i|
-  puts "#{sprintf "%2d", i + 1}. ##{parsed[:hashtags][i][1][:hashtag]} (#{parsed[:hashtags][i][1][:count]} times)"
+if CONFIG[:clients][:enabled]
+  puts "Most used clients:"
+  begin
+    (0...CONFIG[:clients][:top]).each do |i|
+      puts "#{sprintf "%2d", i + 1}. #{parsed[:clients][i][1][:name]} (#{parsed[:clients][i][1][:count]} tweets)"
+    end
+  rescue
+  end
 end
 
-puts "Most used clients:"
-(0...10).each do |i|
-  puts "#{sprintf "%2d", i + 1}. #{parsed[:clients][i][1][:name]} (#{parsed[:clients][i][1][:count]} tweets)"
+if CONFIG[:hashtags][:enabled]
+  puts "Your most used hashtags:"
+  begin
+    (0...CONFIG[:hashtags][:top]).each do |i|
+      puts "#{sprintf "%2d", i + 1}. ##{parsed[:hashtags][i][1][:hashtag]} (#{parsed[:hashtags][i][1][:count]} times)"
+    end
+  rescue
+  end
 end
 
 puts "Generating HTML"

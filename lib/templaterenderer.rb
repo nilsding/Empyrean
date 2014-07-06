@@ -46,19 +46,23 @@ class TemplateRenderer
     # Returns an array with the mentions which can be easily used within ERB.
     def mentions_erb
       retdict = {
-        top10: [],
+        enabled: CONFIG[:mentions][:enabled],
+        top: [],
         nottop: []
       }
-      top10 = @parsed[:mentions].slice(0, 10) # top 10 mentions
-      top10.each do |mention|
-        retdict[:top10] << mention[1]
-      end
       
-      nottop = @parsed[:mentions].slice(11, 20) # not in the top 10
-      unless nottop.nil?
-        nottop.each do |mention|
-          mention[1].delete(:example)
-          retdict[:nottop] << mention[1]
+      if CONFIG[:mentions][:enabled]
+        top = @parsed[:mentions].slice(0, CONFIG[:mentions][:top]) # top X mentions
+        top.each do |mention|
+          retdict[:top] << mention[1]
+        end
+        
+        nottop = @parsed[:mentions].slice(CONFIG[:mentions][:top] + 1, CONFIG[:mentions][:notop]) # not in the top X
+        unless nottop.nil?
+          nottop.each do |mention|
+            mention[1].delete(:example)
+            retdict[:nottop] << mention[1]
+          end
         end
       end
       
@@ -69,19 +73,23 @@ class TemplateRenderer
     # Returns an array with the hashtags which can be easily used within ERB.
     def hashtags_erb
       retdict = {
-        top10: [],
+        enabled: CONFIG[:hashtags][:enabled],
+        top: [],
         nottop: []
       }
-      top10 = @parsed[:hashtags].slice(0, 10) # top 10 mentions
-      top10.each do |hashtag|
-        retdict[:top10] << hashtag[1]
-      end
       
-      nottop = @parsed[:hashtags].slice(11, 20) # not in the top 10
-      unless nottop.nil?
-        nottop.each do |hashtag|
-          hashtag[1].delete(:example)
-          retdict[:nottop] << hashtag[1]
+      if CONFIG[:hashtags][:enabled]
+        top = @parsed[:hashtags].slice(0, CONFIG[:hashtags][:top]) # top X hashtags
+        top.each do |hashtag|
+          retdict[:top] << hashtag[1]
+        end
+        
+        nottop = @parsed[:hashtags].slice(CONFIG[:hashtags][:top] + 1, CONFIG[:hashtags][:notop]) # not in the top X
+        unless nottop.nil?
+          nottop.each do |hashtag|
+            hashtag[1].delete(:example)
+            retdict[:nottop] << hashtag[1]
+          end
         end
       end
       
@@ -92,29 +100,33 @@ class TemplateRenderer
     # Returns an array with the clients which can be easily used within ERB.
     def clients_erb
       retdict = {
-        top10: [],
+        enabled: CONFIG[:clients][:enabled],
+        top: [],
         nottop: []
       }
-      top10 = @parsed[:clients].slice(0, 10) # top 10 clients
-      top10.each do |client|
-        retdict[:top10] << {
-          name: client[1][:name],
-          url: client[1][:url],
-          count: client[1][:count],
-          percentage: (client[1][:count] * 100 / @parsed[:tweet_count].to_f).round(2)
-        }
-      end
       
-      nottop = @parsed[:clients].slice(11, 20) # not in the top 10
-      unless nottop.nil?
-        nottop.each do |client|
-          client[1].delete(:example)
-          retdict[:nottop] << {
+      if CONFIG[:clients][:enabled]
+        top = @parsed[:clients].slice(0, CONFIG[:clients][:top]) # top X clients
+        top.each do |client|
+          retdict[:top] << {
             name: client[1][:name],
             url: client[1][:url],
             count: client[1][:count],
             percentage: (client[1][:count] * 100 / @parsed[:tweet_count].to_f).round(2)
           }
+        end
+        
+        nottop = @parsed[:clients].slice(CONFIG[:clients][:top] + 1, CONFIG[:clients][:notop]) # not in the top X
+        unless nottop.nil?
+          nottop.each do |client|
+            client[1].delete(:example)
+            retdict[:nottop] << {
+              name: client[1][:name],
+              url: client[1][:url],
+              count: client[1][:count],
+              percentage: (client[1][:count] * 100 / @parsed[:tweet_count].to_f).round(2)
+            }
+          end
         end
       end
       
