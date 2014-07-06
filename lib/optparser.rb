@@ -26,6 +26,7 @@ class OptParser
     options = OpenStruct.new
     options.jsondir = ""
     options.outfile = "output.html"
+    options.config = File.expand_path('.', "config.yml")
     options.template = File.expand_path('.', "template/default.html.erb")
     options.verbose = false
 
@@ -34,6 +35,10 @@ class OptParser
       
       opts.separator ""
       opts.separator "Specific options:"
+      
+      opts.on("-c", "--config CONFIG", "The configuration file to use (default: #{options.config})") do |config|
+        options.config = config
+      end
       
       opts.on("-d", "--jsondir DIRECTORY", "Directory with tweet files (containing 2014_07.js etc.)") do |dir|
         dir = File.expand_path('.', dir)
