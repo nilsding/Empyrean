@@ -104,7 +104,7 @@ class TweetParser
         retdict[:mentions][hash_user] ||= {}
         retdict[:mentions][hash_user][:name] ||= user[0]
         retdict[:mentions][hash_user][:count] = retdict[:mentions][hash_user][:count].to_i.succ
-        retdict[:mentions][hash_user][:example] ||= tweet['text']
+        retdict[:mentions][hash_user][:example] ||= { text: tweet['text'], id: tweet['id'] }
       end
       
       # scan for hashtags
@@ -114,7 +114,7 @@ class TweetParser
         retdict[:hashtags][hash_hashtag] ||= {}
         retdict[:hashtags][hash_hashtag][:hashtag] ||= hashtag[0]
         retdict[:hashtags][hash_hashtag][:count] = retdict[:hashtags][hash_hashtag][:count].to_i.succ
-        retdict[:hashtags][hash_hashtag][:example] ||= tweet['text']
+        retdict[:hashtags][hash_hashtag][:example] ||= { text: tweet['text'], id: tweet['id'] }
       end
     end
     
