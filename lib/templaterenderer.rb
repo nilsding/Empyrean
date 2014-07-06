@@ -35,6 +35,7 @@ class TemplateRenderer
   # Renders @template.
   def render
     mentions = mentions_erb
+    clients = clients_erb
     erb = ERB.new @template
     erb.result binding
   end
@@ -60,7 +61,37 @@ class TemplateRenderer
       
       retdict
     end
-  
+    
+    ##
+    # Returns an array with the clients which can be easily used within ERB.
+    def clients_erb
+      retdict = {
+        top10: [],
+        nottop: []
+      }
+      top10 = @parsed[:clients].slice(0, 10) # top 10 clients
+      top10.each do |client|
+        retdict[:top10] << {
+          name: client[1][:name],
+          url: client[1][:url],
+          count: client[1][:count],
+          percentage: (client[1][:count] * 100 / @parsed[:tweet_count].to_f).round(2)
+        }
+      end
+      
+      nottop = @parsed[:clients].slice(11, 20) # not in the top 10
+      nottop.each do |client|
+        mention[1].delete(:example)
+        retdict[:nottop] << {
+          name: client[1][:name],
+          url: client[1][:url],
+          count: client[1][:count],
+          percentage: (client[1][:count] * 100 / @parsed[:tweet_count].to_f).round(2)
+        }
+      end
+      
+      retdict
+    end
 end
 
 # kate: indent-width 2

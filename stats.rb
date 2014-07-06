@@ -43,6 +43,11 @@ puts "You send most mentions to:"
   puts "#{sprintf "%2d", i + 1}. #{parsed[:mentions][i][0]} (#{parsed[:mentions][i][1][:count]} tweets)"
 end
 
+puts "Most used clients:"
+(0...10).each do |i|
+  puts "#{sprintf "%2d", i + 1}. #{parsed[:clients][i][1][:name]} (#{parsed[:clients][i][1][:count]} tweets)"
+end
+
 puts "Generating HTML"
 template_file = File.open OPTIONS.template
 template = template_file.read
