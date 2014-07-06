@@ -24,6 +24,7 @@ RTS_VERSION_STR = "RubyTwitterStats 0.0.1"
 require 'optparser'
 require 'tweetloader'
 require 'tweetparser'
+require 'templaterenderer'
 
 OPTIONS = OptParser.parse(ARGV)
 tweet_files = TweetLoader.read_directory(OPTIONS.jsondir)
@@ -41,5 +42,15 @@ puts "You send most mentions to:"
 (0...10).each do |i|
   puts "#{sprintf "%2d", i + 1}. #{parsed[:mentions][i][0]} (#{parsed[:mentions][i][1][:count]} tweets)"
 end
+
+puts "Generating HTML"
+template_file = File.open OPTIONS.template
+template = template_file.read
+renderer = TemplateRenderer.new template, parsed
+outfile = File.open(OPTIONS.outfile, 'w')
+outfile.write renderer.render
+outfile.flush
+outfile.close
+
 
 # kate: indent-width 2
