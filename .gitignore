@@ -2,3 +2,5 @@
 tweets/
 # ignore output HTML
 output.html
+# ignore configuration
+config.yml
