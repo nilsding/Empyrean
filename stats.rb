@@ -47,10 +47,10 @@ puts "Generating HTML"
 template_file = File.open OPTIONS.template
 template = template_file.read
 renderer = TemplateRenderer.new template, parsed
-outfile = File.open(OPTIONS.outfile, 'w')
-outfile.write renderer.render
-outfile.flush
-outfile.close
+File.open(OPTIONS.outfile, 'w') do |outfile|
+  outfile.write renderer.render
+  outfile.flush
+end
 
 
 # kate: indent-width 2
