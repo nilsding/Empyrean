@@ -22,6 +22,10 @@
   .badge {
     float: right;
   }
+
+  .float-right {
+    float: right;
+  }
   </style>
   <body>
     <div class="container">
@@ -46,7 +50,7 @@
             <td><%= index + 1 %>.</td>
             <td><a href="http://twitter.com/<%= user[:name] %>">@<%= user[:name] %></a></td>
             <td><%= user[:count] %></td>
-            <td><%= user[:example] %></td>
+            <td><%= user[:example] %> <a class="float-right" href=""><i class="glyphicon glyphicon-share-alt"></i></a></td>
           </tr>
 <% end %>
         </tbody>
@@ -120,7 +124,7 @@
             <td><%= index + 1 %>.</td>
             <td>#<%= hashtag[:hashtag] %></td>
             <td><%= hashtag[:count] %></td>
-            <td><%= hashtag[:example] %></td>
+            <td><%= hashtag[:example] %> <a class="float-right" href=""><i class="glyphicon glyphicon-share-alt"></i></a></td>
           </tr>
 <% end %>
         </tbody>
