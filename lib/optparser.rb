@@ -26,6 +26,7 @@ class OptParser
     options = OpenStruct.new
     options.jsondir = ""
     options.outfile = "output.html"
+    options.template = File.expand_path('.', "template/main.html.erb")
     options.verbose = false
 
     opts = OptionParser.new do |opts|
@@ -53,8 +54,12 @@ class OptParser
         options.jsondir = dir
       end
       
-      opts.on("-o", "--outfile OUTFILE", "Output HTML file") do |outfile|
+      opts.on("-o", "--outfile OUTFILE", "Output HTML file (default: #{options.outfile})") do |outfile|
         options.output = outfile
+      end
+      
+      opts.on("-t", "--template TEMPLATE", "Template to use (default: #{options.template})") do |template|
+        options.template = template
       end
       
       opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
