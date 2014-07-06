@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Twitter Stats for #{username}</title>
+    <title>Twitter Stats</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -21,24 +21,28 @@
   <body>
     <div class="container">
       <div class="page-header">
-        <h2>Twitter Stats for #{username}</h2>
+        <h2>Twitter Stats</h2>
       </div>
       <h4>Most Mentioned Users</h4>
       <p>With this, you can see the people you mentioned most in your Twitter time!</p>
       <table class="table table-responsive table-bordered">
         <thead>
           <tr>
+            <td>&nbsp;</td>
             <td>Username</td>
             <td>Times Mentioned</td>
             <td>Example</td>
           </tr>
         </thead>
         <tbody>
+<% mentions.each_with_index do |user, index| %>
           <tr>
-            <td>@username</td>
-            <td>0</td>
-            <td>@username This is a mention!</td>
+            <td><%= index + 1 %>.</td>
+            <td>@<%= user[0] %></td>
+            <td><%= user[1][:count] %></td>
+            <td><%= user[1][:example] %></td>
           </tr>
+<% end %>
         </tbody>
       </table>
       <h4>Most Used Twitter-Clients</h4>
