@@ -52,7 +52,7 @@
       <table class="table table-responsive table-bordered">
         <tr>
   <% mentions[:nottop].each_with_index do |user, index| %>
-          <td>@<%= user[:name] %> (<%= user[:count] %>)</td>
+          <td>@<%= user[:name] %> <span class="badge"><%= user[:count] %></span></td>
     <% if index % 5 == 4 %>
         </tr>
         <tr>
@@ -89,7 +89,7 @@
       <table class="table table-responsive table-bordered">
         <tr>
   <% clients[:nottop].each_with_index do |client, index| %>
-          <td><a href="<%= client[:url] %>"><%= client[:name] %></a> (<%= client[:count] %>)</td>
+          <td><a href="<%= client[:url] %>"><%= client[:name] %></a> <span class="badge"><%= client[:count] %></span></td>
     <% if index % 5 == 4 %>
         </tr>
         <tr>

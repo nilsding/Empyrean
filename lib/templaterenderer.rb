@@ -81,7 +81,7 @@ class TemplateRenderer
       
       nottop = @parsed[:clients].slice(11, 20) # not in the top 10
       nottop.each do |client|
-        mention[1].delete(:example)
+        client[1].delete(:example)
         retdict[:nottop] << {
           name: client[1][:name],
           url: client[1][:url],
