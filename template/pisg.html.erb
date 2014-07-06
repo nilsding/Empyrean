@@ -1,0 +1,265 @@
+<%#-*- coding: utf-8 -*-%>
+<% table_colours = ['#babadc', '#bcbcda', '#bebed8', '#c0c0d7', '#c2c2d4', '#c4c4d3', '#c6c6d1', '#c7c7d0', '#c9c9ce', '#cccccc'] %>
+<% table_width = 710 %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Twitter Stats</title>
+<style type="text/css" title="default">
+a {
+    text-decoration: none;
+}
+a:link {
+    color: #0b407a;
+}
+a:visited {
+    color: #0b407a;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #0b407a;
+}
+
+a.background {
+    text-decoration: none;
+}
+
+a.background:link {
+    color: #0b407a;
+}
+
+a.background:visited {
+    color: #0b407a;
+}
+
+a.background:hover {
+    text-decoration: underline;
+    color: #0b407a;
+}
+
+body {
+    background-color: #dedeee;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 13px;
+    color: black;
+}
+
+td {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 13px;
+    color: black;
+    text-align: left;
+}
+
+.title {
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.headtext {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    background-color: #666699;
+}
+
+.headlinebg {
+    background-color: #000000;
+}
+
+.tdtop {
+    background-color: #C8C8DD;
+}
+
+.hicell {
+    background-color: #BABADD;
+}
+
+.hicell10 {
+    background-color: #BABADD;
+    font-size: 10px;
+}
+
+.rankc {
+    background-color: #CCCCCC;
+}
+
+.hirankc {
+    background-color: #AAAAAA;
+    font-weight: bold;
+}
+
+.rankc10 {
+    background-color: #CCCCCC;
+    font-size: 10px;
+}
+
+.rankc10center {
+    background-color: #CCCCCC;
+    font-size: 10px;
+    text-align: center;
+}
+
+.hirankc10center {
+    background-color: #AAAAAA;
+    font-weight: bold;
+    font-size: 10px;
+    text-align: center;
+}
+
+.small {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 10px;
+}
+
+
+.asmall {
+      font-family: "Arial narrow", Arial, sans-serif;
+      font-size: 10px;
+      color: black;
+      text-align: center;
+}
+</style>
+</head>
+<body>
+<div align="center">
+
+<span class="title">Twitter Stats</span><br />
+<br />
+   <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Most mentioned users</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+  
+<table border="0" width="<%= table_width + 4 %>">
+  <tr>
+    <td>&nbsp;</td>
+    <td class="tdtop"><b>User</b></td>
+    <td class="tdtop"><b>How often?</b></td>
+    <td class="tdtop"><b>Random quote</b></td>
+  </tr>
+<% mentions[:top10].each_with_index do |user, index| %>
+  <tr>
+    <td class="<% if index == 0 %>hi<% end %>rankc" align="left"><%= index + 1 %></td>
+    <td style="background-color: <%= table_colours[index] %>"><span><a href="https://twitter.com/<%= user[:name] %>">@<%= user[:name] %></a></span></td>
+    <td style="background-color: <%= table_colours[index] %>"><%= user[:count] %></td>
+    <td style="background-color: <%= table_colours[index] %>">"<%= user[:example][:text] %>" <a href="https://twitter.com/statuses/<%= user[:example][:id] %>">&rarr;</a></td>
+  </tr>
+<% end %>
+</table><br />
+<br />
+<% if mentions[:nottop].length > 0 %><b><i>These didn't make it to the top:</i></b><table><tr>
+  <% mentions[:nottop].each_with_index do |user, index| %>
+          <td class="rankc10"><span><a href="https://twitter.com/<%= user[:name] %>">@<%= user[:name] %></a> (<%= user[:count] %>)</span></td>
+    <% if index % 5 == 4 %>
+        </tr>
+        <tr>
+    <% end %>
+  <% end %>
+        </tr>
+      </table><br />
+   <br />
+<% end %>
+
+   <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Most used clients</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+ 
+<table border="0" width="<%= table_width + 4 %>">
+  <tr>
+    <td>&nbsp;</td>
+    <td class="tdtop"><b>Client</b></td>
+    <td class="tdtop"><b>Times used</b></td>
+    <td class="tdtop"><b>Percentage</b></td>
+  </tr>
+<% clients[:top10].each_with_index do |client, index| %>
+  <tr>
+    <td class="<% if index == 0 %>hi<% end %>rankc" align="left"><%= index + 1 %></td>
+    <td style="background-color: <%= table_colours[index] %>"><span><a href="<%= client[:url] %>"><%= client[:name] %></a></span></td>
+    <td style="background-color: <%= table_colours[index] %>"><%= client[:count] %></td>
+    <td style="background-color: <%= table_colours[index] %>"><%= client[:percentage] %>%</td>
+  </tr>
+<% end %>
+</table><br />
+<br />
+<% if clients[:nottop].length > 0 %><b><i>These didn't make it to the top:</i></b><table><tr>
+  <% clients[:nottop].each_with_index do |client, index| %>
+          <td class="rankc10"><span><a href="<%= client[:url] %>"><%= client[:name] %></a> (<%= client[:count] %>)</span></td>
+    <% if index % 5 == 4 %>
+        </tr>
+        <tr>
+    <% end %>
+  <% end %>
+        </tr>
+      </table><br />
+   <br />
+<% end %>
+
+   <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Most used hashtags</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+ 
+<table border="0" width="<%= table_width + 4 %>">
+  <tr>
+    <td>&nbsp;</td>
+    <td class="tdtop"><b>Hashtag</b></td>
+    <td class="tdtop"><b>Times used</b></td>
+    <td class="tdtop"><b>Random quote</b></td>
+  </tr>
+<% hashtags[:top10].each_with_index do |hashtag, index| %>
+  <tr>
+    <td class="<% if index == 0 %>hi<% end %>rankc" align="left"><%= index + 1 %></td>
+    <td style="background-color: <%= table_colours[index] %>"><span><a href="https://twitter.com/search?q=%23<%= hashtag[:hashtag] %>">#<%= hashtag[:hashtag] %></a></span></td>
+    <td style="background-color: <%= table_colours[index] %>"><%= hashtag[:count] %></td>
+    <td style="background-color: <%= table_colours[index] %>">"<%= hashtag[:example][:text] %>" <a href="https://twitter.com/statuses/<%= hashtag[:example][:id] %>">&rarr;</a></td>
+  </tr>
+<% end %>
+</table><br />
+<br />
+<% if hashtags[:nottop].length > 0 %><b><i>These didn't make it to the top:</i></b><table><tr>
+  <% hashtags[:nottop].each_with_index do |hashtag, index| %>
+          <td class="rankc10"><span><a href="https://twitter.com/search?q=%23<%= hashtag[:hashtag] %>">#<%= hashtag[:hashtag] %></a> (<%= hashtag[:count] %>)</span></td>
+    <% if index % 5 == 4 %>
+        </tr>
+        <tr>
+    <% end %>
+  <% end %>
+        </tr>
+      </table><br />
+   <br />
+<% end %>
+   
+<span class="small">
+Stats generated by <a href="https://github.com/Leafcat/RubyTwitterStats" class="background"><%= RTS_VERSION_STR %></a><br />
+RubyTwitterStats by <a href="http://leafc.at" class="background">Leafcat</a>
+</span>
+</div>
+</body>
+</html>
+
