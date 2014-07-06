@@ -26,7 +26,7 @@ class OptParser
     options = OpenStruct.new
     options.jsondir = ""
     options.outfile = "output.html"
-    options.template = File.expand_path('.', "template/main.html.erb")
+    options.template = File.expand_path('.', "template/default.html.erb")
     options.verbose = false
 
     opts = OptionParser.new do |opts|
