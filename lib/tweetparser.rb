@@ -17,12 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-require 'rubygems'
-require 'nokogiri'
-require 'digest'
 require 'json'
 
 USERNAME_REGEX = /[@]([a-zA-Z0-9_]{1,16})/
+SOURCE_REGEX = /^<a href=\"(https?:\/\/\S+|erased_\d+)\" rel=\"nofollow\">(.+)<\/a>$/
 
 class TweetParser
   
@@ -56,7 +54,7 @@ class TweetParser
       end
       
       # add client to the clients dict      
-      client_sha1 = Digest::SHA1.hexdigest(parsed_tweet[:client][:name])
+      client_sha1 = parsed_tweet[:client][:name]
       retdict[:clients][client_sha1] ||= { count: 0 }
       retdict[:clients][client_sha1][:count] += 1
       retdict[:clients][client_sha1][:name] = parsed_tweet[:client][:name]
@@ -98,9 +96,9 @@ class TweetParser
     end
     
     # Tweet source (aka. the client the (re)tweet was made with)
-    doc = Nokogiri::HTML(tweet['source'])
-    retdict[:client][:name] = doc.css('a').children.first.text
-    retdict[:client][:url]  = doc.css('a').first.attributes['href'].value
+    source_matches = tweet['source'].match SOURCE_REGEX
+    retdict[:client][:url]  = source_matches[1]
+    retdict[:client][:name] = source_matches[2]
     
     retdict
   end
