@@ -40,7 +40,7 @@
 <% mentions[:top10].each_with_index do |user, index| %>
           <tr>
             <td><%= index + 1 %>.</td>
-            <td>@<%= user[:name] %></td>
+            <td><a href="http://twitter.com/<%= user[:name] %>">@<%= user[:name] %></a></td>
             <td><%= user[:count] %></td>
             <td><%= user[:example] %></td>
           </tr>
@@ -52,7 +52,7 @@
       <table class="table table-responsive table-bordered">
         <tr>
   <% mentions[:nottop].each_with_index do |user, index| %>
-          <td>@<%= user[:name] %> <span class="badge"><%= user[:count] %></span></td>
+          <td><a href="http://twitter.com/<%= user[:name] %>">@<%= user[:name] %></a> <span class="badge"><%= user[:count] %></span></td>
     <% if index % 5 == 4 %>
         </tr>
         <tr>
