@@ -40,7 +40,12 @@ puts "  - #{(parsed[:retweet_count] * 100 / parsed[:tweet_count].to_f).round(2)}
 
 puts "You send most mentions to:"
 (0...10).each do |i|
-  puts "#{sprintf "%2d", i + 1}. #{parsed[:mentions][i][0]} (#{parsed[:mentions][i][1][:count]} tweets)"
+  puts "#{sprintf "%2d", i + 1}. #{parsed[:mentions][i][1][:name]} (#{parsed[:mentions][i][1][:count]} times)"
+end
+
+puts "Your most used hashtags:"
+(0...10).each do |i|
+  puts "#{sprintf "%2d", i + 1}. ##{parsed[:hashtags][i][1][:hashtag]} (#{parsed[:hashtags][i][1][:count]} times)"
 end
 
 puts "Most used clients:"
