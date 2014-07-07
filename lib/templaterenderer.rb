@@ -57,7 +57,7 @@ class TemplateRenderer
           retdict[:top] << mention[1]
         end
         
-        nottop = @parsed[:mentions].slice(CONFIG[:mentions][:top] + 1, CONFIG[:mentions][:notop]) # not in the top X
+        nottop = @parsed[:mentions].slice(CONFIG[:mentions][:top], CONFIG[:mentions][:notop]) # not in the top X
         unless nottop.nil?
           nottop.each do |mention|
             mention[1].delete(:example)
@@ -84,7 +84,7 @@ class TemplateRenderer
           retdict[:top] << hashtag[1]
         end
         
-        nottop = @parsed[:hashtags].slice(CONFIG[:hashtags][:top] + 1, CONFIG[:hashtags][:notop]) # not in the top X
+        nottop = @parsed[:hashtags].slice(CONFIG[:hashtags][:top], CONFIG[:hashtags][:notop]) # not in the top X
         unless nottop.nil?
           nottop.each do |hashtag|
             hashtag[1].delete(:example)
@@ -116,7 +116,7 @@ class TemplateRenderer
           }
         end
         
-        nottop = @parsed[:clients].slice(CONFIG[:clients][:top] + 1, CONFIG[:clients][:notop]) # not in the top X
+        nottop = @parsed[:clients].slice(CONFIG[:clients][:top], CONFIG[:clients][:notop]) # not in the top X
         unless nottop.nil?
           nottop.each do |client|
             client[1].delete(:example)
