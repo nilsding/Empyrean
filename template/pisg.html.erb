@@ -161,7 +161,12 @@ td {
 <div align="center">
 
 <span class="title">Twitter Stats</span><br />
-<br /><% if mentions[:enabled] %>
+<br />
+Statistics generated on <%= Time.now.strftime("%A %d %B %Y - %T") %><br />
+Total number of tweets: <%= counters[:tweets] %> (<%= counters[:retweets_percentage] %>% retweets)
+<br /><br />
+
+<% if mentions[:enabled] %>
    <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
     <tr>
      <td class="headlinebg">

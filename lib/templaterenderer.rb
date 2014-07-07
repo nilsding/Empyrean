@@ -37,6 +37,13 @@ class TemplateRenderer
     mentions = mentions_erb
     hashtags = hashtags_erb
     clients = clients_erb
+    counters = {
+      tweets: @parsed[:tweet_count],
+      retweets: @parsed[:retweet_count],
+      retweets_percentage: (@parsed[:retweet_count] * 100 / @parsed[:tweet_count].to_f).round(2),
+      selftweets: @parsed[:selftweet_count],
+      selftweets_percentage: (@parsed[:selftweet_count] * 100 / @parsed[:tweet_count].to_f).round(2)
+    }
     erb = ERB.new @template
     erb.result binding
   end

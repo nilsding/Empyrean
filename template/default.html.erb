@@ -32,6 +32,9 @@
       <div class="page-header">
         <h2>Twitter Stats</h2>
       </div>
+      
+      <p>Statistics generated on <%= Time.now.strftime("%A %d %B %Y - %T") %></p>
+      <p>Total number of tweets: <%= counters[:tweets] %> (<%= counters[:retweets_percentage] %>% retweets)</p>
 
 <% if mentions[:enabled] %>
       <h4>Most Mentioned Users</h4>
