@@ -80,5 +80,4 @@ File.open(OPTIONS.outfile, 'w') do |outfile|
   outfile.flush
 end
 
-
 # kate: indent-width 2

@@ -34,6 +34,7 @@ class TweetParser
       mentions: {},
       hashtags: {},
       clients: {},
+      times_of_day: [0] * 24,
       tweet_count: 0,
       retweet_count: 0,
       selftweet_count: 0,
@@ -70,6 +71,8 @@ class TweetParser
       retdict[:clients][client_dict][:name] = parsed_tweet[:client][:name]
       retdict[:clients][client_dict][:url] = parsed_tweet[:client][:url]
       
+      retdict[:times_of_day][parsed_tweet[:time_of_day]] += 1
+      
       # increase tweet count
       retdict[:tweet_count] += 1
     end
@@ -86,6 +89,7 @@ class TweetParser
     retdict = {
       mentions: {},
       hashtags: {},
+      time_of_day: 0,
       retweet: false,
       client: {
         name: "",
@@ -123,6 +127,9 @@ class TweetParser
     retdict[:client][:url]  = source_matches[1]
     retdict[:client][:name] = source_matches[2]
     
+    
+    retdict[:time_of_day] = tweet['created_at'].match(/^\d{4}-\d{2}-\d{2} (\d{2})/)[1].to_i
+    
     retdict
   end
   
@@ -134,6 +141,7 @@ class TweetParser
       mentions: {},
       hashtags: {},
       clients: {},
+      times_of_day: [0] * 24,
       tweet_count: 0,
       retweet_count: 0,
       selftweet_count: 0,
@@ -164,6 +172,10 @@ class TweetParser
         retdict[:clients][client_sha1][:count] += data[:count]
         retdict[:clients][client_sha1][:name] = data[:name]
         retdict[:clients][client_sha1][:url] = data[:url]
+      end
+      
+      elem[:times_of_day].each_with_index do |count, index|
+        retdict[:times_of_day][index] += elem[:times_of_day][index]
       end
     end
     

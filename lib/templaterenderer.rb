@@ -44,6 +44,7 @@ class TemplateRenderer
       selftweets: @parsed[:selftweet_count],
       selftweets_percentage: (@parsed[:selftweet_count] * 100 / @parsed[:tweet_count].to_f).round(2)
     }
+    times_of_day = times_erb
     erb = ERB.new @template
     erb.result binding
   end
@@ -138,6 +139,22 @@ class TemplateRenderer
       end
       
       retdict
+    end
+    
+    def times_erb
+      retarr = []
+      max_count = @parsed[:times_of_day].max
+      
+      @parsed[:times_of_day].each do |count|
+        retarr << {
+          count: count,
+          percentage: (count * 100 / @parsed[:tweet_count].to_f).round(1),
+          size: ((count / max_count.to_f) * 100).to_i,
+          max: count == max_count
+        }
+      end
+      
+      retarr
     end
 end
 
