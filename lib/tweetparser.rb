@@ -128,7 +128,7 @@ class TweetParser
     retdict[:client][:name] = source_matches[2]
     
     
-    retdict[:time_of_day] = tweet['created_at'].match(/^\d{4}-\d{2}-\d{2} (\d{2})/)[1].to_i
+    retdict[:time_of_day] = (tweet['created_at'].match(/^\d{4}-\d{2}-\d{2} (\d{2})/)[1].to_i + CONFIG[:timezone_difference]) % 24
     
     retdict
   end

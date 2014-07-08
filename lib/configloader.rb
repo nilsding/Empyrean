@@ -32,18 +32,19 @@ class ConfigLoader
   # value is missing, it will be set with the default value.
   def self.load_config(file)
     config = self.load(file)
-    config[:mentions]           = {}        if config[:mentions].nil?
-    config[:mentions][:enabled] = true      if config[:mentions][:enabled].nil?
-    config[:mentions][:top]     = 10        if config[:mentions][:top].nil?
-    config[:mentions][:notop]   = 20        if config[:mentions][:notop].nil?
-    config[:clients]            = {}        if config[:clients].nil?
-    config[:clients][:enabled]  = true      if config[:clients][:enabled].nil?
-    config[:clients][:top]      = 10        if config[:clients][:top].nil?
-    config[:clients][:notop]    = 20        if config[:clients][:notop].nil?
-    config[:hashtags]           = {}        if config[:hashtags].nil?
-    config[:hashtags][:enabled] = true      if config[:hashtags][:enabled].nil?
-    config[:hashtags][:top]     = 10        if config[:hashtags][:top].nil?
-    config[:hashtags][:notop]   = 20        if config[:hashtags][:notop].nil?
+    config[:timezone_difference] = 0        if config[:timezone_difference].nil?
+    config[:mentions]            = {}       if config[:mentions].nil?
+    config[:mentions][:enabled]  = true     if config[:mentions][:enabled].nil?
+    config[:mentions][:top]      = 10       if config[:mentions][:top].nil?
+    config[:mentions][:notop]    = 20       if config[:mentions][:notop].nil?
+    config[:clients]             = {}       if config[:clients].nil?
+    config[:clients][:enabled]   = true     if config[:clients][:enabled].nil?
+    config[:clients][:top]       = 10       if config[:clients][:top].nil?
+    config[:clients][:notop]     = 20       if config[:clients][:notop].nil?
+    config[:hashtags]            = {}       if config[:hashtags].nil?
+    config[:hashtags][:enabled]  = true     if config[:hashtags][:enabled].nil?
+    config[:hashtags][:top]      = 10       if config[:hashtags][:top].nil?
+    config[:hashtags][:notop]    = 20       if config[:hashtags][:notop].nil?
     config
   end
   

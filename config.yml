@@ -1,5 +1,7 @@
 # RubyTwitterStats config file
 
+timezone_difference: 0  # Time zone difference (e.g. 2 for UTC+2, -6 for UTC-6)
+
 mentions:
   enabled: true   # Enable "Most mentioned users" list
   top: 10         # How many users to show on the "Most mentioned users" list
@@ -12,5 +14,5 @@ hashtags:
   enabled: true   # Enable "Most used hashtags" list
   top: 10         # How many hashtags to show on the "Most used hashtags" list
   notop: 20       # How many hashtags to show on the "These didn't make it to the top" list
-
+  
 # kate: indent-width 2
