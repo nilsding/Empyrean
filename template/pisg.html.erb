@@ -13,12 +13,14 @@
     end_green   = table_colour_end.match(/.{2}([0-9A-Fa-f]{2}).{2}/)[1].to_i(16)
     end_blue    = table_colour_end.match(/.{4}([0-9A-Fa-f]{2})/)[1].to_i(16)
     
-    blue  = sprintf "%0.2x", ((((end_blue - start_blue) / count) * + position) + start_blue).abs
-    green = sprintf "%0.2x", ((((end_green - start_green) / count) * + position) + start_green).abs
-    red   = sprintf "%0.2x", ((((end_red - start_red) / count) * + position) + start_red).abs
+    blue  = sprintf "%0.2x", ((((end_blue - start_blue) / count.to_f) * + position) + start_blue).abs
+    green = sprintf "%0.2x", ((((end_green - start_green) / count.to_f) * + position) + start_green).abs
+    red   = sprintf "%0.2x", ((((end_red - start_red) / count.to_f) * + position) + start_red).abs
     
     "##{red}#{green}#{blue}"
   end
+  _generate_colour(100, 100)
+  _generate_colour(100, 0)
   
   def _colour(time)
     case time
