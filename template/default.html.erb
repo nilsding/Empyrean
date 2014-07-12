@@ -55,7 +55,7 @@
       <p>Total number of tweets: <%= counters[:tweets] %> (<%= counters[:retweets_percentage] %>% retweets)</p>
 
       <h4>Most active times</h4>
-      <p>At what time do you tweet the most?</p>
+      <p>What time do you tweet the most?</p>
       <table class="table">
         <tr>
 <% times_of_day.each_with_index do |time, index| %>
@@ -76,7 +76,7 @@
       </table>
       
 <% if mentions[:enabled] %>
-      <h4>Most Mentioned Users</h4>
+      <h4>Most mentioned users</h4>
       <p>With this, you can see the people you mentioned most in your Twitter time!</p>
       <table class="table table-responsive table-bordered">
         <thead>
@@ -115,7 +115,7 @@
 <% end %>
 
 <% if clients[:enabled] %>
-      <h4>Most Used Twitter-Clients</h4>
+      <h4>Most used clients</h4>
       <p>What is/was your favorite and most used client? Find it out right here!</p>
       <table class="table table-responsive table-bordered">
         <thead>
@@ -153,8 +153,47 @@
   <% end %>
 <% end %>
 
+<% if smileys[:enabled] %>
+      <h4>Most used smileys :^)</h4>
+      <p>;-)</p>
+      <table class="table table-responsive table-bordered">
+        <thead>
+          <tr>
+            <td>&nbsp;</td>
+            <td>Smiley</td>
+            <td>Times Used</td>
+            <td>Example</td>
+          </tr>
+        </thead>
+        <tbody>
+  <% smileys[:top].each_with_index do |smiley, index| %>
+          <tr>
+            <td><%= index + 1 %>.</td>
+            <td><%= smiley[:smiley] %></td>
+            <td><%= smiley[:count] %></td>
+            <td><%= smiley[:example][:text] %> <a class="float-right" href="https://twitter.com/statuses/<%= smiley[:example][:id] %>"><i class="glyphicon glyphicon-share-alt"></i></a></td>
+          </tr>
+  <% end %>
+        </tbody>
+      </table>
+  <% if smileys[:nottop].length > 0 %>
+      <h5>These didn't make it to the top…  ;_;</h5>
+      <table class="table table-responsive table-bordered">
+        <tr>
+    <% smileys[:nottop].each_with_index do |smiley, index| %>
+          <td><%= smiley[:smiley] %> <span class="badge"><%= smiley[:count] %></span></td>
+      <% if index % 5 == 4 %>
+        </tr>
+        <tr>
+      <% end %>
+    <% end %>
+        </tr>
+      </table>
+  <% end %>
+<% end %>
+
 <% if hashtags[:enabled] %>
-      <h4>Most Used Hashtags</h4>
+      <h4>Most used hashtags</h4>
       <p>What were you talking about on Twitter most? <span class="text-muted">(Or you simply spammed/overused those hashtags)</span></p>
       <table class="table table-responsive table-bordered">
         <thead>

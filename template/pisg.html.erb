@@ -32,6 +32,7 @@
   table_colours_mentions = []
   table_colours_clients = []
   table_colours_hashtags = []
+  table_colours_smileys = []
   
   (0...CONFIG[:mentions][:top]).each do |i|
     table_colours_mentions << _generate_colour(CONFIG[:mentions][:top], i)
@@ -41,6 +42,9 @@
   end
   (0...CONFIG[:hashtags][:top]).each do |i|
     table_colours_hashtags << _generate_colour(CONFIG[:hashtags][:top], i)
+  end
+  (0...CONFIG[:smileys][:top]).each do |i|
+    table_colours_smileys << _generate_colour(CONFIG[:smileys][:top], i)
   end
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -328,6 +332,50 @@ Total number of tweets: <%= counters[:tweets] %> (<%= counters[:retweets_percent
 <% if clients[:nottop].length > 0 %><b><i>These didn't make it to the top:</i></b><table><tr>
   <% clients[:nottop].each_with_index do |client, index| %>
           <td class="rankc10"><span><a href="<%= client[:url] %>"><%= client[:name] %></a> (<%= client[:count] %>)</span></td>
+    <% if index % 5 == 4 %>
+        </tr>
+        <tr>
+    <% end %>
+  <% end %>
+        </tr>
+      </table><br />
+   <br />
+<% end %>
+<% end %>
+
+<% if smileys[:enabled] %>
+   <table width="<%= table_width %>" cellpadding="1" cellspacing="0" border="0">
+    <tr>
+     <td class="headlinebg">
+      <table width="100%" cellpadding="2" cellspacing="0" border="0">
+       <tr>
+        <td class="headtext">Most used smileys :^)</td>
+       </tr>
+      </table>
+     </td>
+    </tr>
+   </table>
+ 
+<table border="0" width="<%= table_width + 4 %>">
+  <tr>
+    <td>&nbsp;</td>
+    <td class="tdtop"><b>Smiley</b></td>
+    <td class="tdtop"><b>Times used</b></td>
+    <td class="tdtop"><b>Random quote</b></td>
+  </tr>
+<% smileys[:top].each_with_index do |smiley, index| %>
+  <tr>
+    <td class="<% if index == 0 %>hi<% end %>rankc" align="left"><%= index + 1 %></td>
+    <td style="background-color: <%= table_colours_smileys[index] %>"><span><%= smiley[:smiley] %></span></td>
+    <td style="background-color: <%= table_colours_smileys[index] %>"><%= smiley[:count] %></td>
+    <td style="background-color: <%= table_colours_smileys[index] %>">"<%= smiley[:example][:text] %>" <a href="https://twitter.com/statuses/<%= smiley[:example][:id] %>">&rarr;</a></td>
+  </tr>
+<% end %>
+</table><br />
+<br />
+<% if smileys[:nottop].length > 0 %><b><i>These didn't make it to the top ;_;</i></b><table><tr>
+  <% smileys[:nottop].each_with_index do |smiley, index| %>
+          <td class="rankc10"><span><%= smiley[:smiley] %> (<%= smiley[:count] %>)</span></td>
     <% if index % 5 == 4 %>
         </tr>
         <tr>

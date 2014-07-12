@@ -44,7 +44,7 @@ puts "  - #{(parsed[:retweet_count] * 100 / parsed[:tweet_count].to_f).round(2)}
 if CONFIG[:mentions][:enabled]
   puts "You send most mentions to:"
   begin
-    (0...CONFIG[:mentions][:top]).each do |i|
+    CONFIG[:mentions][:top].times do |i|
       puts "#{sprintf "%2d", i + 1}. #{parsed[:mentions][i][1][:name]} (#{parsed[:mentions][i][1][:count]} times)"
     end
   rescue
@@ -54,7 +54,7 @@ end
 if CONFIG[:clients][:enabled]
   puts "Most used clients:"
   begin
-    (0...CONFIG[:clients][:top]).each do |i|
+    CONFIG[:clients][:top].times do |i|
       puts "#{sprintf "%2d", i + 1}. #{parsed[:clients][i][1][:name]} (#{parsed[:clients][i][1][:count]} tweets)"
     end
   rescue
@@ -64,8 +64,18 @@ end
 if CONFIG[:hashtags][:enabled]
   puts "Your most used hashtags:"
   begin
-    (0...CONFIG[:hashtags][:top]).each do |i|
+    CONFIG[:hashtags][:top].times do |i|
       puts "#{sprintf "%2d", i + 1}. ##{parsed[:hashtags][i][1][:hashtag]} (#{parsed[:hashtags][i][1][:count]} times)"
+    end
+  rescue
+  end
+end
+
+if CONFIG[:smileys][:enabled]
+  puts "Your most used smileys:"
+  begin
+    CONFIG[:smileys][:top].times do |i|
+      puts "#{sprintf "%2d", i + 1}. #{parsed[:smileys][i][1][:smiley]} (#{parsed[:smileys][i][1][:count]} times)"
     end
   rescue
   end

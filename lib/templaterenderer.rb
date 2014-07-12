@@ -36,6 +36,7 @@ class TemplateRenderer
   def render
     mentions = mentions_erb
     hashtags = hashtags_erb
+    smileys = smileys_erb
     clients = clients_erb
     counters = {
       tweets: @parsed[:tweet_count],
@@ -97,6 +98,33 @@ class TemplateRenderer
           nottop.each do |hashtag|
             hashtag[1].delete(:example)
             retdict[:nottop] << hashtag[1]
+          end
+        end
+      end
+      
+      retdict
+    end
+    
+    ##
+    # Returns an array with the smileys which can be easily used within ERB.
+    def smileys_erb
+      retdict = {
+        enabled: CONFIG[:smileys][:enabled],
+        top: [],
+        nottop: []
+      }
+      
+      if CONFIG[:smileys][:enabled]
+        top = @parsed[:smileys].slice(0, CONFIG[:smileys][:top]) # top X smileys
+        top.each do |smiley|
+          retdict[:top] << smiley[1]
+        end
+        
+        nottop = @parsed[:smileys].slice(CONFIG[:smileys][:top], CONFIG[:smileys][:notop]) # not in the top X
+        unless nottop.nil?
+          nottop.each do |smiley|
+            smiley[1].delete(:example)
+            retdict[:nottop] << smiley[1]
           end
         end
       end

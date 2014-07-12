@@ -45,6 +45,10 @@ class ConfigLoader
     config[:hashtags][:enabled]  = true     if config[:hashtags][:enabled].nil?
     config[:hashtags][:top]      = 10       if config[:hashtags][:top].nil?
     config[:hashtags][:notop]    = 20       if config[:hashtags][:notop].nil?
+    config[:smileys]             = {}       if config[:smileys].nil?
+    config[:smileys][:enabled]   = true     if config[:smileys][:enabled].nil?
+    config[:smileys][:top]       = 10       if config[:smileys][:top].nil?
+    config[:smileys][:notop]     = 0        if config[:smileys][:notop].nil?
     config
   end
   
