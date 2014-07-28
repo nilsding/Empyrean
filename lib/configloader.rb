@@ -24,7 +24,11 @@ class ConfigLoader
   ##
   # Loads a YAML file, parses it and returns a hash with symbolized keys.
   def self.load(file)
-    symbolize_keys(YAML.load_file(File.expand_path('.', file)))
+    if File.exist? file
+      symbolize_keys(YAML.load_file(File.expand_path('.', file)))
+    else
+      {}
+    end
   end
   
   ##
