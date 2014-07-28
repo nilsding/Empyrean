@@ -53,6 +53,24 @@ class ConfigLoader
     config[:smileys][:enabled]   = true     if config[:smileys][:enabled].nil?
     config[:smileys][:top]       = 10       if config[:smileys][:top].nil?
     config[:smileys][:notop]     = 0        if config[:smileys][:notop].nil?
+    args_override config
+  end
+  
+  def self.args_override(config)
+    config_args = OPTIONS.config_values
+    config[:timezone_difference] = config_args[:timezone_difference] unless config_args[:timezone_difference].nil?
+    config[:mentions][:enabled]  = config_args[:mentions_enabled]    unless config_args[:mentions_enabled].nil?
+    config[:mentions][:top]      = config_args[:mentions_top]        unless config_args[:mentions_top].nil?
+    config[:mentions][:notop]    = config_args[:mentions_notop]      unless config_args[:mentions_notop].nil?
+    config[:clients][:enabled]   = config_args[:clients_enabled]     unless config_args[:clients_enabled].nil?
+    config[:clients][:top]       = config_args[:clients_top]         unless config_args[:clients_top].nil?
+    config[:clients][:notop]     = config_args[:clients_notop]       unless config_args[:clients_notop].nil?
+    config[:hashtags][:enabled]  = config_args[:hashtags_enabled]    unless config_args[:hashtags_enabled].nil?
+    config[:hashtags][:top]      = config_args[:hashtags_top]        unless config_args[:hashtags_top].nil?
+    config[:hashtags][:notop]    = config_args[:hashtags_notop]      unless config_args[:hashtags_notop].nil?
+    config[:smileys][:enabled]   = config_args[:smileys_enabled]     unless config_args[:smileys_enabled].nil?
+    config[:smileys][:top]       = config_args[:smileys_top]         unless config_args[:smileys_top].nil?
+    config[:smileys][:notop]     = config_args[:smileys_notop]       unless config_args[:smileys_notop].nil?
     config
   end
   

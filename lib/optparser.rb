@@ -43,7 +43,14 @@ class OptParser
       
       opts.on("-C", "--config-value KEY=VALUE", "Sets a configuration value (e.g. hashtags_enabled=false)") do |val|
         key, value = val.split("=")
+        key = key.downcase
         unless value.nil?   # ignore empty values
+          case key.to_s
+          when /_enabled$/
+            value = to_bool value
+          when /_(no)?top$/, /timezone_difference$/
+            value = value.to_i
+          end
           options.config_values[key.to_sym] = value
         end
       end
@@ -99,6 +106,20 @@ class OptParser
     
     options
   end # parse()
+  
+  private
+  
+    ##
+    # "converts" a string to a boolean value
+    def self.to_bool str
+      if str == true || str =~ (/(true|t|yes|y|1)$/i)
+        puts "#{str} -> true"
+        true
+      else
+        puts "#{str} -> false"
+        false
+      end
+    end
 end
 
 # kate: indent-width 2
