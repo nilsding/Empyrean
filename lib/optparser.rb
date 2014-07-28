@@ -27,6 +27,7 @@ class OptParser
     options.jsondir = ""
     options.outfile = "output.html"
     options.config = File.expand_path('.', "config.yml")
+    options.config_values = {}
     options.template = File.expand_path('.', "template/default.html.erb")
     options.verbose = false
 
@@ -38,6 +39,13 @@ class OptParser
       
       opts.on("-c", "--config CONFIG", "The configuration file to use (default: #{options.config})") do |config|
         options.config = config
+      end
+      
+      opts.on("-C", "--config-value KEY=VALUE", "Sets a configuration value (e.g. hashtags_enabled=false)") do |val|
+        key, value = val.split("=")
+        unless value.nil?   # ignore empty values
+          options.config_values[key.to_sym] = value
+        end
       end
       
       opts.on("-d", "--jsondir DIRECTORY", "Directory with tweet files (containing 2014_07.js etc.)") do |dir|
