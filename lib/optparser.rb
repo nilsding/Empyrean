@@ -113,10 +113,8 @@ class OptParser
     # "converts" a string to a boolean value
     def self.to_bool str
       if str == true || str =~ (/(true|t|yes|y|1)$/i)
-        puts "#{str} -> true"
         true
       else
-        puts "#{str} -> false"
         false
       end
     end
