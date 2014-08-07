@@ -1,19 +1,19 @@
 # tweetparser.rb - parses tweets
 #
-# This file is part of RubyTwitterStats 
+# This file is part of RubyTwitterStats
 # Copyright (C) 2014 nilsding
 # Copyright (C) 2014 pixeldesu
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,7 +24,7 @@ SOURCE_REGEX = /^<a href=\"(https?:\/\/\S+|erased_\d+)\" rel=\"nofollow\">(.+)<\
 HASHTAG_REGEX = /[#]([^.,\-:!*_?#\s]+)/
 
 class TweetParser
-  
+
   ##
   # Parses an array of tweets
   #
@@ -42,7 +42,7 @@ class TweetParser
     }
     tweets.each do |tweet|
       parsed_tweet = self.parse_one tweet
-      
+
       if parsed_tweet[:retweet]  # the tweet was a retweet
         # increase retweeted tweets count
         retdict[:retweet_count] += 1
@@ -61,7 +61,7 @@ class TweetParser
           retdict[:hashtags][hashtag][:examples] ||= []
           retdict[:hashtags][hashtag][:examples] << data[:example]
         end
-        
+
         parsed_tweet[:smileys].each do |smile, data|
           retdict[:smileys][smile] ||= { count: 0 }
           retdict[:smileys][smile][:frown] ||= data[:frown]
@@ -70,27 +70,27 @@ class TweetParser
           retdict[:smileys][smile][:examples] ||= []
           retdict[:smileys][smile][:examples] << data[:example]
         end
-        
+
         # increase self tweeted tweets count
         retdict[:selftweet_count] += 1
       end
-      
-      # add client to the clients dict      
+
+      # add client to the clients dict
       client_dict = parsed_tweet[:client][:name]
       retdict[:clients][client_dict] ||= { count: 0 }
       retdict[:clients][client_dict][:count] += 1
       retdict[:clients][client_dict][:name] = parsed_tweet[:client][:name]
       retdict[:clients][client_dict][:url] = parsed_tweet[:client][:url]
-      
+
       retdict[:times_of_day][parsed_tweet[:time_of_day]] += 1
-      
+
       # increase tweet count
       retdict[:tweet_count] += 1
     end
-    
+
     retdict
   end
-  
+
   ##
   # Parses a single tweet object
   #
@@ -108,7 +108,7 @@ class TweetParser
       },
       smileys: {}
     }
-    
+
     # check if the tweet is actually a retweet and ignore the status text
     unless tweet['retweeted_status'].nil?
       retdict[:retweet] = true
@@ -122,7 +122,7 @@ class TweetParser
         retdict[:mentions][hash_user][:count] = retdict[:mentions][hash_user][:count].to_i.succ
         retdict[:mentions][hash_user][:example] ||= { text: tweet['text'], id: tweet['id'] }
       end
-      
+
       # scan for hashtags
       tweet['text'].scan HASHTAG_REGEX do |hashtag|
         hash_hashtag = hashtag[0].downcase
@@ -132,16 +132,16 @@ class TweetParser
         retdict[:hashtags][hash_hashtag][:count] = retdict[:hashtags][hash_hashtag][:count].to_i.succ
         retdict[:hashtags][hash_hashtag][:example] ||= { text: tweet['text'], id: tweet['id'] }
       end
-      
+
       # Smileys :^)
-      eyes = "[8;:=%]"
+      eyes = "[xX8;:=%]"
       nose = "[-oc*^]"
       smile_regex = /(>?#{eyes}'?#{nose}[\)pPD\}\]>]|[\(\{\[<]#{nose}'?#{eyes}<?|[;:][\)pPD\}\]\>]|\([;:]|\^[_o-]*\^[';]|\\[o.]\/)/
       frown_regex = /(#{eyes}'?#{nose}[\(\[\\\/\{|]|[\)\]\\\/\}|]#{nose}'?#{eyes}|[;:][\(\/]|[\)D]:|;_+;|T_+T|-[._]+-)/
-      
+
       # TODO: unescape html so that "&lt;/div&gt;" no longer gets matched
       unescaped_tweet = tweet['text']
-      
+
       unescaped_tweet.scan smile_regex do |smile|
         smile = smile[0]
         puts "===> smile: #{smile}" if OPTIONS.verbose
@@ -150,7 +150,7 @@ class TweetParser
         retdict[:smileys][smile][:count] = retdict[:smileys][smile][:count].to_i.succ
         retdict[:smileys][smile][:example] ||= { text: tweet['text'], id: tweet['id'] }
       end
-      
+
       unescaped_tweet.scan frown_regex do |frown|
         break unless unescaped_tweet !~ /\w+:\/\// # http:// :^)
         frown = frown[0]
@@ -161,18 +161,18 @@ class TweetParser
         retdict[:smileys][frown][:example] ||= { text: tweet['text'], id: tweet['id'] }
       end
     end
-    
+
     # Tweet source (aka. the client the (re)tweet was made with)
     source_matches = tweet['source'].match SOURCE_REGEX
     retdict[:client][:url]  = source_matches[1]
     retdict[:client][:name] = source_matches[2]
-    
+
     # Time of day
     retdict[:time_of_day] = (tweet['created_at'].match(/^\d{4}-\d{2}-\d{2} (\d{2})/)[1].to_i + CONFIG[:timezone_difference]) % 24
-    
+
     retdict
   end
-  
+
   ##
   # Merges an array which contains dicts returned by self.parse()
   # Increases all counters.
@@ -191,7 +191,7 @@ class TweetParser
       retdict[:tweet_count] += elem[:tweet_count]
       retdict[:retweet_count] += elem[:retweet_count]
       retdict[:selftweet_count] += elem[:selftweet_count]
-      
+
       elem[:mentions].each do |user, data|
         retdict[:mentions][user] ||= { count: 0 }
         retdict[:mentions][user][:count] += data[:count]
@@ -199,7 +199,7 @@ class TweetParser
         retdict[:mentions][user][:examples] ||= []
         retdict[:mentions][user][:examples] += data[:examples]
       end
-      
+
       elem[:hashtags].each do |hashtag, data|
         retdict[:hashtags][hashtag] ||= { count: 0 }
         retdict[:hashtags][hashtag][:count] += data[:count]
@@ -207,7 +207,7 @@ class TweetParser
         retdict[:hashtags][hashtag][:examples] ||= []
         retdict[:hashtags][hashtag][:examples] += data[:examples]
       end
-      
+
       elem[:smileys].each do |smile, data|
         retdict[:smileys][smile] ||= { count: 0 }
         retdict[:smileys][smile][:frown] ||= data[:frown]
@@ -216,19 +216,19 @@ class TweetParser
         retdict[:smileys][smile][:examples] ||= []
         retdict[:smileys][smile][:examples] += data[:examples]
       end
-      
+
       elem[:clients].each do |client, data|
         retdict[:clients][client] ||= { count: 0 }
         retdict[:clients][client][:count] += data[:count]
         retdict[:clients][client][:name] = data[:name]
         retdict[:clients][client][:url] = data[:url]
       end
-      
+
       elem[:times_of_day].each_with_index do |count, index|
         retdict[:times_of_day][index] += elem[:times_of_day][index]
       end
     end
-    
+
     # take only one example
     retdict[:mentions].each do |user, data|
       retdict[:mentions][user][:example] = retdict[:mentions][user][:examples].sample
@@ -242,12 +242,12 @@ class TweetParser
       retdict[:smileys][smile][:example] = retdict[:smileys][smile][:examples].sample
       retdict[:smileys][smile].delete(:examples)
     end
-    
+
     retdict[:mentions] = retdict[:mentions].sort_by { |k, v| v[:count] }.reverse
     retdict[:hashtags] = retdict[:hashtags].sort_by { |k, v| v[:count] }.reverse
     retdict[:clients]  = retdict[:clients].sort_by  { |k, v| v[:count] }.reverse
     retdict[:smileys]  = retdict[:smileys].sort_by  { |k, v| v[:count] }.reverse
-    
+
     retdict
   end
 end
