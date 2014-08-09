@@ -19,7 +19,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 $:.unshift File.expand_path './lib', File.dirname(__FILE__)
-RTS_VERSION_STR = "RubyTwitterStats 0.0.1"
+RTS_VERSION_STR = "RubyTwitterStats 0.0.2"
 
 require 'optparser'
 require 'configloader'
