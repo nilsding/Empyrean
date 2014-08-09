@@ -76,6 +76,7 @@ class ConfigLoader
     config[:ignored_users]       = config_args[:ignored_users]       unless config_args[:ignored_users].nil?
     config[:ignored_users].each do |user|    user.downcase! end
     config[:renamed_users].each do |old, new| new.downcase! end
+    config
   end
   
   private
