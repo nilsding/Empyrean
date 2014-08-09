@@ -108,7 +108,7 @@ class TweetParser
       },
       smileys: {}
     }
-
+    
     # check if the tweet is actually a retweet and ignore the status text
     unless tweet['retweeted_status'].nil?
       retdict[:retweet] = true
@@ -117,10 +117,12 @@ class TweetParser
       tweet['text'].scan USERNAME_REGEX do |user|
         hash_user = user[0].downcase
         puts "===> mentioned: #{user[0]}" if OPTIONS.verbose
-        retdict[:mentions][hash_user] ||= {}
-        retdict[:mentions][hash_user][:name] ||= user[0]
-        retdict[:mentions][hash_user][:count] = retdict[:mentions][hash_user][:count].to_i.succ
-        retdict[:mentions][hash_user][:example] ||= { text: tweet['text'], id: tweet['id'] }
+        unless CONFIG[:ignored_users].include? hash_user
+          retdict[:mentions][hash_user] ||= {}
+          retdict[:mentions][hash_user][:name] ||= user[0]
+          retdict[:mentions][hash_user][:count] = retdict[:mentions][hash_user][:count].to_i.succ
+          retdict[:mentions][hash_user][:example] ||= { text: tweet['text'], id: tweet['id'] }
+        end
       end
 
       # scan for hashtags
@@ -139,8 +141,7 @@ class TweetParser
       smile_regex = /(>?#{eyes}'?#{nose}[\)pPD\}\]>]|[\(\{\[<]#{nose}'?#{eyes}<?|[;:][\)pPD\}\]\>]|\([;:]|\^[_o-]*\^[';]|\\[o.]\/)/
       frown_regex = /(#{eyes}'?#{nose}[\(\[\\\/\{|]|[\)\]\\\/\}|]#{nose}'?#{eyes}|[;:][\(\/]|[\)D]:|;_+;|T_+T|-[._]+-)/
 
-      # TODO: unescape html so that "&lt;/div&gt;" no longer gets matched
-      unescaped_tweet = tweet['text']
+      unescaped_tweet = tweet['text'].gsub("&amp;", "&").gsub("&lt;", "<").gsub("&gt;", ">")
 
       unescaped_tweet.scan smile_regex do |smile|
         smile = smile[0]

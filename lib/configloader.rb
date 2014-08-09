@@ -53,6 +53,7 @@ class ConfigLoader
     config[:smileys][:enabled]   = true     if config[:smileys][:enabled].nil?
     config[:smileys][:top]       = 10       if config[:smileys][:top].nil?
     config[:smileys][:notop]     = 0        if config[:smileys][:notop].nil?
+    config[:ignored_users]       = []       if config[:ignored_users].nil?
     args_override config
   end
   
@@ -71,6 +72,8 @@ class ConfigLoader
     config[:smileys][:enabled]   = config_args[:smileys_enabled]     unless config_args[:smileys_enabled].nil?
     config[:smileys][:top]       = config_args[:smileys_top]         unless config_args[:smileys_top].nil?
     config[:smileys][:notop]     = config_args[:smileys_notop]       unless config_args[:smileys_notop].nil?
+    config[:ignored_users]       = config_args[:ignored_users]       unless config_args[:ignored_users].nil?
+    config[:ignored_users].each do |user| user.downcase! end
     config
   end
   

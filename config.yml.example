@@ -18,5 +18,9 @@ smileys:
   enabled: true   # Enable "Most used smileys" list
   top: 10         # How many smileys to show on the "Most used smileys" list
   notop: 0        # How many smileys to show on the "These didn't make it to the top" list
-  
+
+ignored_users:    # Users to exclude from the statistics.
+  - BarackObama
+  - tbhjuststop
+
 # kate: indent-width 2

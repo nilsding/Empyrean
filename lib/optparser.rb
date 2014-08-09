@@ -50,6 +50,8 @@ class OptParser
             value = to_bool value
           when /_(no)?top$/, /timezone_difference$/
             value = value.to_i
+          when /ignored_users/
+            value = value.split ','
           end
           options.config_values[key.to_sym] = value
         end
