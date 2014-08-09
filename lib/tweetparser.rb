@@ -118,6 +118,9 @@ class TweetParser
         hash_user = user[0].downcase
         puts "===> mentioned: #{user[0]}" if OPTIONS.verbose
         unless CONFIG[:ignored_users].include? hash_user
+          if CONFIG[:renamed_users].include? hash_user.to_sym
+            hash_user = CONFIG[:renamed_users][hash_user.to_sym]
+          end
           retdict[:mentions][hash_user] ||= {}
           retdict[:mentions][hash_user][:name] ||= user[0]
           retdict[:mentions][hash_user][:count] = retdict[:mentions][hash_user][:count].to_i.succ
