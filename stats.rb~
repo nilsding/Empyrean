@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby19
 # stats.rb - generate a statistics page from your Twitter archive
 #
-# This file is part of Empyrean
+# This file is part of RubyTwitterStats
 # Copyright (C) 2014 nilsding
 # Copyright (C) 2014 pixeldesu
 #

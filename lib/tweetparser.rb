@@ -1,6 +1,6 @@
 # tweetparser.rb - parses tweets
 #
-# This file is part of RubyTwitterStats
+# This file is part of Empyrean
 # Copyright (C) 2014 nilsding
 # Copyright (C) 2014 pixeldesu
 #
@@ -108,7 +108,7 @@ class TweetParser
       },
       smileys: {}
     }
-    
+
     # check if the tweet is actually a retweet and ignore the status text
     unless tweet['retweeted_status'].nil?
       retdict[:retweet] = true

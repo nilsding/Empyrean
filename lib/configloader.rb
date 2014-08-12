@@ -1,26 +1,26 @@
 # configloader.rb - loads a config file
 #
-# This file is part of RubyTwitterStats 
+# This file is part of Empyrean
 # Copyright (C) 2014 nilsding
 # Copyright (C) 2014 pixeldesu
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 require 'yaml'
 
 class ConfigLoader
-  
+
   ##
   # Loads a YAML file, parses it and returns a hash with symbolized keys.
   def self.load(file)
@@ -30,7 +30,7 @@ class ConfigLoader
       {}
     end
   end
-  
+
   ##
   # Loads a YAML file, parses it and checks if all values are given.  If a
   # value is missing, it will be set with the default value.
@@ -57,7 +57,7 @@ class ConfigLoader
     config[:renamed_users]       = []       if config[:renamed_users].nil?
     args_override config
   end
-  
+
   def self.args_override(config)
     config_args = OPTIONS.config_values
     config[:timezone_difference] = config_args[:timezone_difference] unless config_args[:timezone_difference].nil?
@@ -78,7 +78,7 @@ class ConfigLoader
     config[:renamed_users].each do |old, new| new.downcase! end
     config
   end
-  
+
   private
     ##
     # Symbolizes the keys of a hash, duh.
