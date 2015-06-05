@@ -30,7 +30,7 @@ module Empyrean
       options.outfile = "output.html"
       options.config = File.expand_path('.', "config.yml")
       options.config_values = {}
-      options.template = File.expand_path('.', "template/default.html.erb")
+      options.template = DEFAULT_TEMPLATE
       options.verbose = false
 
       opts = OptionParser.new do |opts|
@@ -82,7 +82,7 @@ module Empyrean
           options.output = outfile
         end
         
-        opts.on_tail("-l", "--list-templates", "List available templates") do
+        opts.on("-l", "--list-templates", "List available templates") do
           TemplateLister.print_list
           exit
         end
@@ -94,8 +94,8 @@ module Empyrean
         opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
           options.verbose = v
         end
+        
         # No argument, shows at tail.  This will print an options summary.
-        # Try it and see!
         opts.on_tail("-h", "--help", "Show this message") do
           puts opts
           exit

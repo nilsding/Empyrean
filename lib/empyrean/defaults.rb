@@ -37,4 +37,7 @@ module Empyrean
   
   # Path to the templates
   TEMPLATE_DIR = File.expand_path "../templates", __FILE__
+  
+  # The default template to use
+  DEFAULT_TEMPLATE = "default.html.erb"
 end
