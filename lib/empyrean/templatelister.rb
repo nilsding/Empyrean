@@ -1,4 +1,4 @@
-# defaults.rb - some constants
+# templatelister.rb - lists available templates
 #
 # This file is part of Empyrean
 # Copyright (C) 2015 nilsding, pixeldesu
@@ -16,25 +16,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+require 'empyrean/defaults'
+
 module Empyrean
-  # Application name
-  APP_NAME = "Empyrean"
-
-  # Version
-  VERSION = "0.0.2"
-
-  # Combined version string
-  VERSION_STR = "#{APP_NAME} #{VERSION}"
-
-  # Regexp for matching user names
-  USERNAME_REGEX = /[@]([a-zA-Z0-9_]{1,16})/
-
-  # Regexp for matching the client source
-  SOURCE_REGEX = /^<a href=\"(https?:\/\/\S+|erased_\d+)\" rel=\"nofollow\">(.+)<\/a>$/
-
-  # Regexp for matching hashtags
-  HASHTAG_REGEX = /[#]([^{}\[\]().,\-:!*_?#\s]+)/
-  
-  # Path to the templates
-  TEMPLATE_DIR = File.expand_path "../templates", __FILE__
+  class TemplateLister
+    class << self
+      # Returns an array of available templates.
+      def list
+        Dir[File.join TEMPLATE_DIR, "*.html.erb"].map{ |t| File.basename t }
+      end
+      
+      # Prints the available templates to stdout.
+      def print_list
+        puts list
+      end
+    end
+  end
 end

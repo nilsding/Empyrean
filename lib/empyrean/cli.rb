@@ -21,6 +21,7 @@ require 'empyrean/optparser'
 require 'empyrean/configloader'
 require 'empyrean/tweetloader'
 require 'empyrean/tweetparser'
+require 'empyrean/templatelister'
 require 'empyrean/templaterenderer'
 
 module Empyrean

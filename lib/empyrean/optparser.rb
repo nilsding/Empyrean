@@ -1,8 +1,7 @@
 # optparser.rb - parses CLI options using Ruby's OptionParser
 #
 # This file is part of Empyrean
-# Copyright (C) 2014 nilsding
-# Copyright (C) 2014 pixeldesu
+# Copyright (C) 2015 nilsding, pixeldesu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +19,7 @@
 require 'optparse'
 require 'ostruct'
 require 'empyrean/defaults'
+require 'empyrean/templatelister'
 
 module Empyrean
   class OptParser
@@ -80,6 +80,11 @@ module Empyrean
 
         opts.on("-o", "--outfile OUTFILE", "Output HTML file (default: #{options.outfile})") do |outfile|
           options.output = outfile
+        end
+        
+        opts.on_tail("-l", "--list-templates", "List available templates") do
+          TemplateLister.print_list
+          exit
         end
 
         opts.on("-t", "--template TEMPLATE", "Template to use (default: #{options.template})") do |template|
