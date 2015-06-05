@@ -21,7 +21,7 @@ module Empyrean
   APP_NAME = "Empyrean"
 
   # Version
-  VERSION = "0.0.2"
+  VERSION = "0.1.0"
 
   # Combined version string
   VERSION_STR = "#{APP_NAME} #{VERSION}"
