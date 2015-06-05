@@ -19,7 +19,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 $:.unshift File.expand_path './lib', File.dirname(__FILE__)
-EMPY_VERSION_STR = "Empyrean 0.0.2"
+require 'empyrean/defaults'
 
 require 'optparser'
 require 'configloader'

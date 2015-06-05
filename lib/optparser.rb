@@ -96,7 +96,7 @@ class OptParser
 
       # Another typical switch to print the version.
       opts.on_tail("--version", "Show version") do
-        puts EMPY_VERSION_STR
+        puts Empyrean::VERSION_STR
         exit
       end
     end.parse!(args)
