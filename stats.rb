@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby19
+#!/usr/bin/env ruby
 # stats.rb - generate a statistics page from your Twitter archive
 #
 # This file is part of Empyrean
