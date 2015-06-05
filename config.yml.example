@@ -24,8 +24,8 @@ ignored_users:    # Users to exclude from the statistics.
   - tbhjuststop
 
 renamed_users:    # Users that have renamed themselves
-  pixeldesu:     "s4tori"   # s4tori was previously known as pixeldesu
-  technikaflash: "s4tori"   # s4tori was also previously known as TechnikaFlash (the downcase on the username is important)
-  traxxed22:     "s4tori"   # and before that, s4tori was known as TraXXed22.
+  pixeldesu:     "mochizune" # mochizune was previously known as pixeldesu
+  technikaflash: "mochizune" # mochizune was also previously known as TechnikaFlash (the downcase on the username is important)
+  traxxed22:     "mochizune" # and before that, mochizune was known as TraXXed22.
 
 # kate: indent-width 2
