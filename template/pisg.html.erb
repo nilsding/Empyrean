@@ -34,17 +34,17 @@
   table_colours_hashtags = []
   table_colours_smileys = []
 
-  (0...CONFIG[:mentions][:top]).each do |i|
-    table_colours_mentions << _generate_colour(CONFIG[:mentions][:top], i)
+  (0...@config[:mentions][:top]).each do |i|
+    table_colours_mentions << _generate_colour(@config[:mentions][:top], i)
   end
-  (0...CONFIG[:clients][:top]).each do |i|
-    table_colours_clients << _generate_colour(CONFIG[:clients][:top], i)
+  (0...@config[:clients][:top]).each do |i|
+    table_colours_clients << _generate_colour(@config[:clients][:top], i)
   end
-  (0...CONFIG[:hashtags][:top]).each do |i|
-    table_colours_hashtags << _generate_colour(CONFIG[:hashtags][:top], i)
+  (0...@config[:hashtags][:top]).each do |i|
+    table_colours_hashtags << _generate_colour(@config[:hashtags][:top], i)
   end
-  (0...CONFIG[:smileys][:top]).each do |i|
-    table_colours_smileys << _generate_colour(CONFIG[:smileys][:top], i)
+  (0...@config[:smileys][:top]).each do |i|
+    table_colours_smileys << _generate_colour(@config[:smileys][:top], i)
   end
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

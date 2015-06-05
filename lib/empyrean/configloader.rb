@@ -22,10 +22,13 @@ require 'empyrean/defaults'
 
 module Empyrean
   class ConfigLoader
-
+    def initialize(options)
+      @options = options
+    end
+    
     ##
     # Loads a YAML file, parses it and returns a hash with symbolized keys.
-    def self.load(file)
+    def load(file)
       if File.exist? file
         symbolize_keys(YAML.load_file(File.expand_path('.', file)))
       else
@@ -33,11 +36,10 @@ module Empyrean
       end
     end
 
-    ##
     # Loads a YAML file, parses it and checks if all values are given.  If a
     # value is missing, it will be set with the default value.
-    def self.load_config(file)
-      config = self.load(file)
+    def load_config(file = @options.config)
+      config = load(file)
       config[:timezone_difference] = 0        if config[:timezone_difference].nil?
       config[:mentions]            = {}       if config[:mentions].nil?
       config[:mentions][:enabled]  = true     if config[:mentions][:enabled].nil?
@@ -60,8 +62,8 @@ module Empyrean
       args_override config
     end
 
-    def self.args_override(config)
-      config_args = OPTIONS.config_values
+    def args_override(config)
+      config_args = @options.config_values
       config[:timezone_difference] = config_args[:timezone_difference] unless config_args[:timezone_difference].nil?
       config[:mentions][:enabled]  = config_args[:mentions_enabled]    unless config_args[:mentions_enabled].nil?
       config[:mentions][:top]      = config_args[:mentions_top]        unless config_args[:mentions_top].nil?
@@ -82,9 +84,9 @@ module Empyrean
     end
 
     private
-    ##
+    
     # Symbolizes the keys of a hash, duh.
-    def self.symbolize_keys(hash)
+    def symbolize_keys(hash)
       hash.inject({}) do |result, (key, value)|
         new_key = case key
                   when String then key.to_sym

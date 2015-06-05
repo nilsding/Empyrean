@@ -28,7 +28,8 @@ module Empyrean
     #
     # template: The template to use (i.e. not the file name)
     # parsed_tweets: The dict that gets returned by TweetParser::merge_parsed
-    def initialize(template, parsed_tweets)
+    def initialize(config, template, parsed_tweets)
+      @config = config
       @template = template
       @parsed = parsed_tweets
     end
@@ -57,18 +58,18 @@ module Empyrean
     # Returns an array with the mentions which can be easily used within ERB.
     def mentions_erb
       retdict = {
-        enabled: CONFIG[:mentions][:enabled],
+        enabled: @config[:mentions][:enabled],
         top: [],
         nottop: []
       }
 
-      if CONFIG[:mentions][:enabled]
-        top = @parsed[:mentions].slice(0, CONFIG[:mentions][:top]) # top X mentions
+      if @config[:mentions][:enabled]
+        top = @parsed[:mentions].slice(0, @config[:mentions][:top]) # top X mentions
         top.each do |mention|
           retdict[:top] << mention[1]
         end
 
-        nottop = @parsed[:mentions].slice(CONFIG[:mentions][:top], CONFIG[:mentions][:notop]) # not in the top X
+        nottop = @parsed[:mentions].slice(@config[:mentions][:top], @config[:mentions][:notop]) # not in the top X
         unless nottop.nil?
           nottop.each do |mention|
             mention[1].delete(:example)
@@ -84,18 +85,18 @@ module Empyrean
     # Returns an array with the hashtags which can be easily used within ERB.
     def hashtags_erb
       retdict = {
-        enabled: CONFIG[:hashtags][:enabled],
+        enabled: @config[:hashtags][:enabled],
         top: [],
         nottop: []
       }
 
-      if CONFIG[:hashtags][:enabled]
-        top = @parsed[:hashtags].slice(0, CONFIG[:hashtags][:top]) # top X hashtags
+      if @config[:hashtags][:enabled]
+        top = @parsed[:hashtags].slice(0, @config[:hashtags][:top]) # top X hashtags
         top.each do |hashtag|
           retdict[:top] << hashtag[1]
         end
 
-        nottop = @parsed[:hashtags].slice(CONFIG[:hashtags][:top], CONFIG[:hashtags][:notop]) # not in the top X
+        nottop = @parsed[:hashtags].slice(@config[:hashtags][:top], @config[:hashtags][:notop]) # not in the top X
         unless nottop.nil?
           nottop.each do |hashtag|
             hashtag[1].delete(:example)
@@ -111,18 +112,18 @@ module Empyrean
     # Returns an array with the smileys which can be easily used within ERB.
     def smileys_erb
       retdict = {
-        enabled: CONFIG[:smileys][:enabled],
+        enabled: @config[:smileys][:enabled],
         top: [],
         nottop: []
       }
 
-      if CONFIG[:smileys][:enabled]
-        top = @parsed[:smileys].slice(0, CONFIG[:smileys][:top]) # top X smileys
+      if @config[:smileys][:enabled]
+        top = @parsed[:smileys].slice(0, @config[:smileys][:top]) # top X smileys
         top.each do |smiley|
           retdict[:top] << smiley[1]
         end
 
-        nottop = @parsed[:smileys].slice(CONFIG[:smileys][:top], CONFIG[:smileys][:notop]) # not in the top X
+        nottop = @parsed[:smileys].slice(@config[:smileys][:top], @config[:smileys][:notop]) # not in the top X
         unless nottop.nil?
           nottop.each do |smiley|
             smiley[1].delete(:example)
@@ -138,13 +139,13 @@ module Empyrean
     # Returns an array with the clients which can be easily used within ERB.
     def clients_erb
       retdict = {
-        enabled: CONFIG[:clients][:enabled],
+        enabled: @config[:clients][:enabled],
         top: [],
         nottop: []
       }
 
-      if CONFIG[:clients][:enabled]
-        top = @parsed[:clients].slice(0, CONFIG[:clients][:top]) # top X clients
+      if @config[:clients][:enabled]
+        top = @parsed[:clients].slice(0, @config[:clients][:top]) # top X clients
         top.each do |client|
           retdict[:top] << {
             name: client[1][:name],
@@ -154,7 +155,7 @@ module Empyrean
           }
         end
 
-        nottop = @parsed[:clients].slice(CONFIG[:clients][:top], CONFIG[:clients][:notop]) # not in the top X
+        nottop = @parsed[:clients].slice(@config[:clients][:top], @config[:clients][:notop]) # not in the top X
         unless nottop.nil?
           nottop.each do |client|
             client[1].delete(:example)
