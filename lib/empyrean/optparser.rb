@@ -38,7 +38,7 @@ module Empyrean
 
         opts.separator ""
         opts.separator "Specific options:"
-
+        
         opts.on("-c", "--config CONFIG", "The configuration file to use (default: #{options.config})") do |config|
           options.config = config
         end
@@ -56,6 +56,19 @@ module Empyrean
               value = value.split ','
             end
             options.config_values[key.to_sym] = value
+          end
+        end
+
+        opts.on("-g", "--generate-config CONFIG", "Generate a new configuration file") do |config_file|
+          fn = File.expand_path '.', config_file
+          if File.exist? fn
+            STDERR.puts "Cowardly refusing to overwrite already existing file #{config_file}."
+            exit 2
+          end
+          File.open fn, 'w' do |f|
+            f.write File.read File.expand_path("../../../config.yml.example", __FILE__)
+            STDERR.puts "Wrote new configuration to #{config_file}."
+            exit
           end
         end
 
