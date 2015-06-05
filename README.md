@@ -7,23 +7,11 @@ Empyrean directory, so you just have to run `./stats.rb -d tweets`
 
 ## Usage
 
+1. Install Empyrean using `gem install empyrean`
 1. Download your Twitter archive and unpack it somewhere.
-2. `./stats.rb -d path/to/data/js/tweets`
+2. `empyrean -d path/to/data/js/tweets`
 3. ???
 4. Profit!
-
-### But… I'm using Windows!
-
-First of all, install [RubyInstaller][ri].  Ruby 1.9 is good to go.  Make sure
-that Ruby is in your `$PATH`.
-
-1. Install RubyInstaller and set its PATH (the installer should do that
-   automatically)
-2. Navigate to the Empyrean-directory and open a PowerShell or cmd in
-   it.
-3. `ruby ./stats.rb -d path/to/data/js/tweets`
-4. ???
-5. Profit!
 
 ## Configuration
 
@@ -36,4 +24,3 @@ variable is a list, seperate the elements with `,`.  For example, to ignore
 the Twitter users `BarackObama` and `baddragon_en`, use
 `-C ignored_users=BarackObama,baddragon_en`.
 
-[ri]: http://rubyinstaller.org/ RubyInstaller
