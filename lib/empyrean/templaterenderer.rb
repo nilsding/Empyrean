@@ -1,8 +1,7 @@
 # templaterenderer.rb - renders a ERB template
 #
 # This file is part of Empyrean
-# Copyright (C) 2014 nilsding
-# Copyright (C) 2014 pixeldesu
+# Copyright (C) 2015 nilsding, pixeldesu
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
