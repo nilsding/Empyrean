@@ -92,7 +92,7 @@ module Empyrean
         end
 
         opts.on("-o", "--outfile OUTFILE", "Output HTML file (default: #{options.outfile})") do |outfile|
-          options.output = outfile
+          options.outfile = outfile
         end
         
         opts.on("-l", "--list-templates", "List available templates") do
