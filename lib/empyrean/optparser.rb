@@ -30,6 +30,7 @@ module Empyrean
       options.outfile = "output.html"
       options.config = File.expand_path('.', "config.yml")
       options.config_values = {}
+      options.print_stats = false
       options.template = DEFAULT_TEMPLATE
       options.verbose = false
 
@@ -102,6 +103,10 @@ module Empyrean
 
         opts.on("-t", "--template TEMPLATE", "Template to use (default: #{options.template})") do |template|
           options.template = template
+        end
+
+        opts.on("-p", "--[no-]print-stats", "Print stats to stdout") do |p|
+          options.print_stats = p
         end
 
         opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|

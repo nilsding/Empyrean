@@ -49,12 +49,13 @@ module Empyrean
     def print_stats(parsed)
       puts "Analyzed #{parsed[:tweet_count]} tweets"
       puts "  - #{(parsed[:retweet_count] * 100 / parsed[:tweet_count].to_f).round(2)}% retweets\n"
+      return unless @options.print_stats
 
       headers = {
-        mentions: ["You send most mentions to:", "times" ],
-        clients:  ["Most used clients:",         "tweets"],
-        hashtags: ["Your most used hashtags:",   "times"],
-        smileys:  ["Your most used smileys:",    "times"]
+        mentions: ["You send most mentions to:", "times",  :name],
+        clients:  ["Most used clients:",         "tweets", :name],
+        hashtags: ["Your most used hashtags:",   "times",  :hashtag],
+        smileys:  ["Your most used smileys:",    "times",  :smiley]
       }
       
       headers.each do |k, v|
@@ -62,7 +63,7 @@ module Empyrean
           puts v[0]
           begin
             @config[k][:top].times do |i|
-              puts "#{sprintf "%2d", i + 1}. #{parsed[k][i][1][:name]} (#{parsed[k][i][1][:count]} #{v[1]})"
+              puts "#{sprintf "%2d", i + 1}. #{'#' if k == :hashtags}#{parsed[k][i][1][v[2]]} (#{parsed[k][i][1][:count]} #{v[1]})"
             end
           rescue => _
           end
@@ -78,6 +79,7 @@ module Empyrean
         outfile.write renderer.render
         outfile.flush
       end
+      puts " => #{@options.outfile}"
     end
     
     def template_file
