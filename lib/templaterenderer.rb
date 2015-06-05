@@ -18,39 +18,41 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 require 'erb'
+require 'empyrean/defaults'
 
-class TemplateRenderer
+module Empyrean
+  class TemplateRenderer
 
-  ##
-  # Initializes a new TemplateRenderer.
-  #
-  # template: The template to use (i.e. not the file name)
-  # parsed_tweets: The dict that gets returned by TweetParser::merge_parsed
-  def initialize(template, parsed_tweets)
-    @template = template
-    @parsed = parsed_tweets
-  end
+    ##
+    # Initializes a new TemplateRenderer.
+    #
+    # template: The template to use (i.e. not the file name)
+    # parsed_tweets: The dict that gets returned by TweetParser::merge_parsed
+    def initialize(template, parsed_tweets)
+      @template = template
+      @parsed = parsed_tweets
+    end
 
-  ##
-  # Renders @template.
-  def render
-    mentions = mentions_erb
-    hashtags = hashtags_erb
-    smileys = smileys_erb
-    clients = clients_erb
-    counters = {
-      tweets: @parsed[:tweet_count],
-      retweets: @parsed[:retweet_count],
-      retweets_percentage: (@parsed[:retweet_count] * 100 / @parsed[:tweet_count].to_f).round(2),
-      selftweets: @parsed[:selftweet_count],
-      selftweets_percentage: (@parsed[:selftweet_count] * 100 / @parsed[:tweet_count].to_f).round(2)
-    }
-    times_of_day = times_erb
-    erb = ERB.new @template
-    erb.result binding
-  end
+    ##
+    # Renders @template.
+    def render
+      mentions = mentions_erb
+      hashtags = hashtags_erb
+      smileys = smileys_erb
+      clients = clients_erb
+      counters = {
+        tweets: @parsed[:tweet_count],
+        retweets: @parsed[:retweet_count],
+        retweets_percentage: (@parsed[:retweet_count] * 100 / @parsed[:tweet_count].to_f).round(2),
+        selftweets: @parsed[:selftweet_count],
+        selftweets_percentage: (@parsed[:selftweet_count] * 100 / @parsed[:tweet_count].to_f).round(2)
+      }
+      times_of_day = times_erb
+      erb = ERB.new @template
+      erb.result binding
+    end
 
-  private
+    private
     ##
     # Returns an array with the mentions which can be easily used within ERB.
     def mentions_erb
@@ -184,6 +186,7 @@ class TemplateRenderer
 
       retarr
     end
+  end
 end
 
 # kate: indent-width 2

@@ -27,16 +27,16 @@ require 'tweetloader'
 require 'tweetparser'
 require 'templaterenderer'
 
-OPTIONS = OptParser.parse(ARGV)
-CONFIG = ConfigLoader.load_config(OPTIONS.config)
+OPTIONS = Empyrean::OptParser.parse(ARGV)
+CONFIG = Empyrean::ConfigLoader.load_config(OPTIONS.config)
 
-tweet_files = TweetLoader.read_directory(OPTIONS.jsondir)
+tweet_files = Empyrean::TweetLoader.read_directory(OPTIONS.jsondir)
 parsed = []
 tweet_files.each do |file|
-  tweet = TweetLoader.read_file file
-  parsed << TweetParser.parse(tweet)
+  tweet = Empyrean::TweetLoader.read_file file
+  parsed << Empyrean::TweetParser.parse(tweet)
 end
-parsed = TweetParser.merge_parsed parsed
+parsed = Empyrean::TweetParser.merge_parsed parsed
 
 puts "Analyzed #{parsed[:tweet_count]} tweets"
 puts "  - #{(parsed[:retweet_count] * 100 / parsed[:tweet_count].to_f).round(2)}% retweets\n"
@@ -84,7 +84,7 @@ end
 puts "Generating HTML"
 template_file = File.open OPTIONS.template
 template = template_file.read
-renderer = TemplateRenderer.new template, parsed
+renderer = Empyrean::TemplateRenderer.new template, parsed
 File.open(OPTIONS.outfile, 'w') do |outfile|
   outfile.write renderer.render
   outfile.flush

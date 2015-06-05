@@ -18,30 +18,33 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 require 'json'
+require 'empyrean/defaults'
 
-class TweetLoader
+module Empyrean
+  class TweetLoader
 
-  ##
-  # Returns a list of file names in a directory.
-  def self.read_directory(directory)
-    files = []
-    entries = Dir.entries(directory)
-    entries.each do |e|
-      if e =~ /^\d{4}_\d{2}\.js$/
-        files << File.expand_path(e, directory)
+    ##
+    # Returns a list of file names in a directory.
+    def self.read_directory(directory)
+      files = []
+      entries = Dir.entries(directory)
+      entries.each do |e|
+        if e =~ /^\d{4}_\d{2}\.js$/
+          files << File.expand_path(e, directory)
+        end
       end
+      files.sort
     end
-    files.sort
-  end
 
-  ##
-  # Reads a tweet file
-  def self.read_file(file)
-    puts "reading file #{file}"
-    fh = File.open(file)
-    contents = fh.read
-    contents.sub! /Grailbird\.data\.tweets_\d{4}_\d{2} =/, '' # get rid of the JS assignment
-    json_tweets = JSON.parse(contents)
+    ##
+    # Reads a tweet file
+    def self.read_file(file)
+      puts "reading file #{file}"
+      fh = File.open(file)
+      contents = fh.read
+      contents.sub! /Grailbird\.data\.tweets_\d{4}_\d{2} =/, '' # get rid of the JS assignment
+      json_tweets = JSON.parse(contents)
+    end
   end
 end
 
