@@ -19,13 +19,13 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 $:.unshift File.expand_path './lib', File.dirname(__FILE__)
-require 'empyrean/defaults'
 
-require 'optparser'
-require 'configloader'
-require 'tweetloader'
-require 'tweetparser'
-require 'templaterenderer'
+require 'empyrean/defaults'
+require 'empyrean/optparser'
+require 'empyrean/configloader'
+require 'empyrean/tweetloader'
+require 'empyrean/tweetparser'
+require 'empyrean/templaterenderer'
 
 OPTIONS = Empyrean::OptParser.parse(ARGV)
 CONFIG = Empyrean::ConfigLoader.load_config(OPTIONS.config)
