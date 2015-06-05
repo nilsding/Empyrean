@@ -72,12 +72,21 @@ module Empyrean
     
     def generate_html(parsed)
       puts "Generating HTML"
-      template_file = File.open @options.template
-      template = template_file.read
+      template = File.read template_file
       renderer = TemplateRenderer.new @config, template, parsed
       File.open(@options.outfile, 'w') do |outfile|
         outfile.write renderer.render
         outfile.flush
+      end
+    end
+    
+    def template_file
+      if File.exist? File.join(Dir.pwd, @options.template)
+        File.join(Dir.pwd, @options.template)
+      elsif TemplateLister.list.include? @options.template
+        File.join TEMPLATE_DIR, @options.template
+      else
+        @options.template
       end
     end
   end
