@@ -4,3 +4,5 @@ tweets/
 output.html
 # ignore configuration
 config.yml
+# ignore gemfiles
+*.gem
